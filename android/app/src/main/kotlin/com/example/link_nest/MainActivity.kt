@@ -1,4 +1,4 @@
-package com.example.link_nest
+package com.app.link_nest
 
 import io.flutter.embedding.android.FlutterActivity
 
