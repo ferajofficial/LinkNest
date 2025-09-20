@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- PERMISSIONS || ACCESS -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
-        android:label="link_nest"
+        android:label="Link Nest"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

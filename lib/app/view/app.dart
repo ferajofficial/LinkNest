@@ -33,7 +33,7 @@ class _AppState extends ConsumerState<App> with GlobalHelper {
     final locale = ref.watch(localePod);
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'link_nest App',
+      title: 'Link Nest',
       theme: Themes.theme,
       darkTheme: Themes.darkTheme,
       themeMode: currentTheme,
@@ -72,20 +72,20 @@ class _AppState extends ConsumerState<App> with GlobalHelper {
           child = AnnotatedRegion<SystemUiOverlayStyle>(
             value: currentTheme == ThemeMode.dark
                 ? SystemUiOverlayStyle.light.copyWith(
-                    statusBarColor: Colors.white.withOpacity(0.4),
+                    statusBarColor: Colors.white,
                     systemNavigationBarColor: Colors.black,
                     systemNavigationBarDividerColor: Colors.black,
                     systemNavigationBarIconBrightness: Brightness.dark,
                   )
                 : currentTheme == ThemeMode.light
                     ? SystemUiOverlayStyle.dark.copyWith(
-                        statusBarColor: Colors.white.withOpacity(0.4),
+                        statusBarColor: Colors.white,
                         systemNavigationBarColor: Colors.grey,
                         systemNavigationBarDividerColor: Colors.grey,
                         systemNavigationBarIconBrightness: Brightness.light,
                       )
                     : SystemUiOverlayStyle.dark.copyWith(
-                        statusBarColor: Colors.white.withOpacity(0.4),
+                        statusBarColor: Colors.white,
                         systemNavigationBarColor: Colors.grey,
                         systemNavigationBarDividerColor: Colors.grey,
                         systemNavigationBarIconBrightness: Brightness.light,
