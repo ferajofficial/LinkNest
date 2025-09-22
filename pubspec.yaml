@@ -22,6 +22,7 @@ dependencies:
     sdk: flutter
   flutter_riverpod: ^2.6.1
   flutter_secure_storage: ^10.0.0-beta.4
+  google_fonts: ^6.3.1
   hive_ce_flutter: ^2.3.2
   icons_launcher: ^3.0.2
   internet_connection_checker_plus: ^2.8.0
@@ -55,3 +56,7 @@ dependency_overrides:
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/logos/
+    - assets/icons/
+    - assets/illustrations/

@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:link_nest/bootstrap.dart';
 import 'package:link_nest/features/splash/controller/future_initializer.dart';
+import 'package:link_nest/features/splash/view/splash_loader.dart';
 import 'package:link_nest/shared/riverpod_ext/asynvalue_easy_when.dart';
 
 ///This view displayed for initializing all the required things on initialization.
@@ -185,7 +186,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
     super.initState();
 
     // Start the 4-second minimum duration timer
-    _minimumDurationTimer = Timer(const Duration(seconds: 2), () {
+    _minimumDurationTimer = Timer(const Duration(seconds: 5), () {
       _minimumDurationCompleted = true;
       _checkIfReadyToComplete();
     });
@@ -248,70 +249,70 @@ class _SplashViewState extends ConsumerState<SplashView> {
           errorWidget: (error, stackTrace) => child!,
         );
       },
-      child: const LoaderChild(),
+      child: const SplashLoaderChild(),
     );
   }
 }
 
-class LoaderChild extends StatefulWidget {
-  const LoaderChild({
-    super.key,
-  });
+// class LoaderChild extends StatefulWidget {
+//   const LoaderChild({
+//     super.key,
+//   });
 
-  @override
-  State<LoaderChild> createState() => _LoaderChildState();
-}
+//   @override
+//   State<LoaderChild> createState() => _LoaderChildState();
+// }
 
-class _LoaderChildState extends State<LoaderChild> with TickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    duration: const Duration(milliseconds: 500),
-    vsync: this,
-  )..repeat(reverse: true);
-  late final Animation<double> _animation = CurvedAnimation(
-    parent: _controller,
-    curve: Curves.elasticOut,
-  );
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+// class _LoaderChildState extends State<LoaderChild> with TickerProviderStateMixin {
+//   late final AnimationController _controller = AnimationController(
+//     duration: const Duration(milliseconds: 500),
+//     vsync: this,
+//   )..repeat(reverse: true);
+//   late final Animation<double> _animation = CurvedAnimation(
+//     parent: _controller,
+//     curve: Curves.elasticOut,
+//   );
+//   @override
+//   void dispose() {
+//     _controller.dispose();
+//     super.dispose();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        color: Colors.white,
-        child: Stack(
-          alignment: AlignmentDirectional.center,
-          children: [
-            Center(
-              child: RotationTransition(
-                turns: _animation,
-                child: const FlutterLogo(
-                  size: 100,
-                ),
-              ),
-            ),
-            const Positioned(
-              bottom: 44,
-              child: CircularProgressIndicator(
-                color: Colors.amber,
-              ),
-            ),
-            const Positioned(
-              bottom: 16,
-              child: Material(
-                  child: Text(
-                "Welcome to Riverpod Simple Architecture App",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              )),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return SafeArea(
+//       child: Container(
+//         color: Colors.white,
+//         child: Stack(
+//           alignment: AlignmentDirectional.center,
+//           children: [
+//             Center(
+//               child: RotationTransition(
+//                 turns: _animation,
+//                 child: const FlutterLogo(
+//                   size: 100,
+//                 ),
+//               ),
+//             ),
+//             const Positioned(
+//               bottom: 44,
+//               child: CircularProgressIndicator(
+//                 color: Colors.amber,
+//               ),
+//             ),
+//             const Positioned(
+//               bottom: 16,
+//               child: Material(
+//                   child: Text(
+//                 "Welcome to Riverpod Simple Architecture App",
+//                 style: TextStyle(
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//               )),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
