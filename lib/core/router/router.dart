@@ -16,10 +16,10 @@ class AppRouter extends RootStackRouter {
     ),
     AutoRoute(
       page: OnboardingRoute.page,
+      initial: true,
     ),
     AutoRoute(
       page: ProfileRoute.page,
-      initial: true,
     ),
   ];
 }
