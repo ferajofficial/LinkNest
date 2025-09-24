@@ -24,25 +24,15 @@ class R {
   static const String ASSETS_ANIMATIONS_SIGN__UP_GIF =
       'assets/animations/sign -up.gif';
 
-  /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/illustrations/Mobile%20login-pana.svg)
-  static const String ASSETS_ILLUSTRATIONS_MOBILE_LOGIN_PANA_SVG =
-      'assets/illustrations/Mobile login-pana.svg';
+  /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/icons/apple.svg)
+  static const String ASSETS_ICONS_APPLE_SVG = 'assets/icons/apple.svg';
 
-  /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/illustrations/Sign%20in-pana.svg)
-  static const String ASSETS_ILLUSTRATIONS_SIGN_IN_PANA_SVG =
-      'assets/illustrations/Sign in-pana.svg';
-
-  /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/illustrations/access_from_anywhere.svg)
-  static const String ASSETS_ILLUSTRATIONS_ACCESS_FROM_ANYWHERE_SVG =
-      'assets/illustrations/access_from_anywhere.svg';
+  /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/icons/google.svg)
+  static const String ASSETS_ICONS_GOOGLE_SVG = 'assets/icons/google.svg';
 
   /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/illustrations/link_nest_branding.png)
   static const String ASSETS_ILLUSTRATIONS_LINK_NEST_BRANDING_PNG =
       'assets/illustrations/link_nest_branding.png';
-
-  /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/illustrations/stay-organised.svg)
-  static const String ASSETS_ILLUSTRATIONS_STAY_ORGANISED_SVG =
-      'assets/illustrations/stay-organised.svg';
 
   /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/logos/appIcon.png)
   static const String ASSETS_LOGOS_APPICON_PNG = 'assets/logos/appIcon.png';
