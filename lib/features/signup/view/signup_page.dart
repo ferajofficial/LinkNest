@@ -395,7 +395,8 @@ class _SigniupPageState extends ConsumerState<SignupPage> with TickerProviderSta
                       GestureDetector(
                         onTap: () {
                           // Handle sign up navigation
-                          context.maybePop();
+                          // context.nextAndRemoveUntilPage(SigninPage());
+                          context.navigateTo(SigninRoute());
                         },
                         child: Text(
                           'Sign in',

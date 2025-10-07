@@ -117,34 +117,52 @@ import 'package:link_nest/shared/widget/responsive_wrapper.dart';
 //   }
 // }
 
-
 class App extends ConsumerStatefulWidget {
-  final ProviderContainer container;
-  const App(this.container, {super.key});
+  // final ProviderContainer container;
+  const App(
+      // this.container,
+      {super.key});
 
   @override
   ConsumerState<App> createState() => _AppState();
 }
 
 class _AppState extends ConsumerState<App> with GlobalHelper {
+  late final AppRouter _appRouter; // Declare as late final
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // Create AuthGuard and AppRouter ONCE
+  //   // Note: We can't use ref in initState, so we'll create it in didChangeDependencies
+  // }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Create router only once on first call
+    if (!_isRouterInitialized) {
+      final authGuard = AuthGuard(ref);
+      _appRouter = AppRouter(authGuard: authGuard);
+      _isRouterInitialized = true;
+    }
+  }
+
+  bool _isRouterInitialized = false;
+
   @override
   Widget build(BuildContext context) {
-    // Create AuthGuard with ref
-    final authGuard = AuthGuard(ref);
-    
-    // Create router with the guard
-    final appRouter = AppRouter(authGuard: authGuard);
-    
     final currentTheme = ref.watch(themecontrollerProvider);
     final locale = ref.watch(localePod);
-    
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Link Nest',
       theme: Themes.theme,
       darkTheme: Themes.darkTheme,
       themeMode: currentTheme,
-      routerConfig: appRouter.config(  // Use appRouter instead of approuter
+      routerConfig: _appRouter.config(
+        // Use the same instance
         placeholder: (context) => const SizedBox.shrink(),
         navigatorObservers: () => [
           RouterObserver(),

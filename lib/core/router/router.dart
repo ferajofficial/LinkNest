@@ -30,7 +30,6 @@ import 'package:link_nest/core/router/router.gr.dart';
 //     ),
 //   ];
 // }
-
 @AutoRouterConfig()
 class AppRouter extends RootStackRouter {
   final AuthGuard? authGuard;
@@ -39,30 +38,28 @@ class AppRouter extends RootStackRouter {
 
   @override
   late final List<AutoRoute> routes = [
-    AutoRoute(
-      page: CounterRoute.page,
-      guards: authGuard != null ? [authGuard!] : [],
-    ),
+    // Protected routes - require authentication
     AutoRoute(
       page: HomeRoute.page,
-      initial: true,
-      guards: authGuard != null ? [authGuard!] : [],
     ),
     AutoRoute(
+      page: ProfileRoute.page,
+    ),
+    AutoRoute(
+      page: CounterRoute.page,
+    ),
+
+    // Auth routes - redirect to home if already authenticated
+    AutoRoute(
+      initial: true,
       page: OnboardingRoute.page,
       guards: authGuard != null ? [authGuard!] : [],
     ),
     AutoRoute(
-      page: ProfileRoute.page,
-      guards: authGuard != null ? [authGuard!] : [],
-    ),
-    AutoRoute(
       page: SigninRoute.page,
-      guards: authGuard != null ? [authGuard!] : [],
     ),
     AutoRoute(
       page: SignupRoute.page,
-      guards: authGuard != null ? [authGuard!] : [],
     ),
   ];
 }

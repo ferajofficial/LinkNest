@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:link_nest/const/resource.dart';
 import 'package:link_nest/core/router/router.gr.dart';
 import 'package:link_nest/data/providers/auth/auth_repo_provider.dart';
-import 'package:link_nest/features/home/view/home_page.dart';
 import 'package:link_nest/shared/global_button.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -313,14 +312,15 @@ class _SigninPageState extends ConsumerState<SigninPage> with TickerProviderStat
       final repo = ref.read(authRepositoryProvider);
       final user = await repo.login(_emailCtrl.text, _passwordCtrl.text);
       if (user != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const HomePage()),
-        );
+        if (mounted) {
+          context.navigateTo(HomeRoute());
+        }
       }
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.message ?? "Login failed")));
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.message ?? "Login failed")));
+      }
     } finally {
       setState(() => _isLoading = false);
     }

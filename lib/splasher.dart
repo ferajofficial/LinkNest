@@ -37,7 +37,7 @@ class Splasher extends StatelessWidget {
         removeSpalshLoader: false,
         onInitialized: (container) {
           bootstrap(
-            () => App(container),  // Pass the container here
+            () => App(),  // Pass the container here
             parent: container,
           );
         },
