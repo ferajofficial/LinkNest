@@ -27,12 +27,20 @@ class R {
   /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/icons/apple.svg)
   static const String ASSETS_ICONS_APPLE_SVG = 'assets/icons/apple.svg';
 
+  /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/icons/empty-nest.svg)
+  static const String ASSETS_ICONS_EMPTY_NEST_SVG =
+      'assets/icons/empty-nest.svg';
+
   /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/icons/google.svg)
   static const String ASSETS_ICONS_GOOGLE_SVG = 'assets/icons/google.svg';
 
   /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/illustrations/link_nest_branding.png)
   static const String ASSETS_ILLUSTRATIONS_LINK_NEST_BRANDING_PNG =
       'assets/illustrations/link_nest_branding.png';
+
+  /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/illustrations/profile.jpg)
+  static const String ASSETS_ILLUSTRATIONS_PROFILE_JPG =
+      'assets/illustrations/profile.jpg';
 
   /// ![preview](file:///Users/skferajuddin/Desktop/development/Projects/Flutter Projects/link_nest/assets/logos/appIcon.png)
   static const String ASSETS_LOGOS_APPICON_PNG = 'assets/logos/appIcon.png';

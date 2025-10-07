@@ -1,8 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:link_nest/const/resource.dart';
 import 'package:link_nest/core/router/router.gr.dart';
+import 'package:link_nest/data/providers/auth/auth_repo_provider.dart';
+import 'package:link_nest/features/home/view/home_page.dart';
 import 'package:link_nest/shared/global_button.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -231,14 +235,14 @@ import 'package:velocity_x/velocity_x.dart';
 //   }
 // }
 
-class SigninPage extends StatefulWidget {
+class SigninPage extends ConsumerStatefulWidget {
   const SigninPage({super.key});
 
   @override
-  State<SigninPage> createState() => _SigninPageState();
+  ConsumerState<SigninPage> createState() => _SigninPageState();
 }
 
-class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
+class _SigninPageState extends ConsumerState<SigninPage> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late List<Animation<double>> _fadeAnimations;
   late List<Animation<Offset>> _slideAnimations;
@@ -296,6 +300,30 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  // ============= FUNCTIONS PART ==========//
+  final _emailCtrl = TextEditingController();
+  final _passwordCtrl = TextEditingController();
+  bool _isLoading = false;
+
+  void _login() async {
+    setState(() => _isLoading = true);
+    try {
+      final repo = ref.read(authRepositoryProvider);
+      final user = await repo.login(_emailCtrl.text, _passwordCtrl.text);
+      if (user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage()),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.message ?? "Login failed")));
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   Widget _buildAnimatedWidget(Widget child, int index) {
@@ -362,6 +390,7 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                 // User name field - animated
                 _buildAnimatedWidget(
                   TextField(
+                    controller: _emailCtrl,
                     decoration: InputDecoration(
                       hintText: 'Your user name/email',
                       hintStyle: TextStyle(color: Colors.grey[400]),
@@ -382,6 +411,7 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                 // Password field - animated
                 _buildAnimatedWidget(
                   TextField(
+                    controller: _passwordCtrl,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: 'Password',
@@ -424,18 +454,19 @@ class _SigninPageState extends State<SigninPage> with TickerProviderStateMixin {
                 // Login button - animated
                 _buildAnimatedWidget(
                   GlobalButton(
-                          backgroundColor: Colors.black,
-                          child: Text(
-                            'Sign in',
-                            style: TextStyle(
-                                fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1,
-                                color: Colors.white),
-                          ),
-                          onPressed: () {})
-                      .w(double.maxFinite)
-                      .h(50),
+                      backgroundColor: Colors.black,
+                      child: Text(
+                        'Sign in',
+                        style: TextStyle(
+                            fontSize: Theme.of(context).textTheme.titleMedium!.fontSize,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 1,
+                            color: Colors.white),
+                      ),
+                      onPressed: () {
+                        //+++++++++++++  PERFORM LOGIN
+                        _login();
+                      }).w(double.maxFinite).h(50),
                   5,
                 ),
                 20.heightBox,

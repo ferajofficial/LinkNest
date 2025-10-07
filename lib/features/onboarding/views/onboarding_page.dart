@@ -318,6 +318,11 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
     // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
     context.navigateTo(SigninRoute());
   }
+  void _navigateToSignUp() {
+    // TODO: Add navigation logic to login screen
+    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    context.navigateTo(SignupRoute());
+  }
 
   // void _onPageChanged(int index) {
   //   if (index != currentPage) {
@@ -525,7 +530,7 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
                             onSkip: _skipToEnd,
                             onPrevious: _goToPrevious,
                             onLogin: _navigateToLogin,
-                            onGetStarted: _navigateToLogin, // or whatever function you want
+                            onGetStarted: _navigateToSignUp, // or whatever function you want
                           ),
                         ),
                       ),

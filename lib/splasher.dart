@@ -3,6 +3,28 @@ import 'package:link_nest/app/view/app.dart';
 import 'package:link_nest/bootstrap.dart';
 import 'package:link_nest/features/splash/view/splash_view.dart';
 
+// class Splasher extends StatelessWidget {
+//   const Splasher({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(primaryColor: Colors.blue),
+//       home: SplashView(
+//         removeSpalshLoader: false,
+//         onInitialized: (container) {
+//           bootstrap(
+//             () => Center(child: const App()),
+//             parent: container,
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
+
+
 class Splasher extends StatelessWidget {
   const Splasher({super.key});
 
@@ -15,7 +37,7 @@ class Splasher extends StatelessWidget {
         removeSpalshLoader: false,
         onInitialized: (container) {
           bootstrap(
-            () => const App(),
+            () => App(container),  // Pass the container here
             parent: container,
           );
         },
