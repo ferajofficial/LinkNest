@@ -291,7 +291,7 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
       setState(() {
         currentPage++;
       });
-        _startAutoProgress();
+      _startAutoProgress();
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -318,6 +318,7 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
     // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
     context.navigateTo(SigninRoute());
   }
+
   void _navigateToSignUp() {
     // TODO: Add navigation logic to login screen
     // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
@@ -493,10 +494,10 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
                           child: Text(
                             data.title,
                             style: TextStyle(
-                              fontSize: Theme.of(context).textTheme.displayMedium!.fontSize,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1,
-                            ),
+                                fontSize: Theme.of(context).textTheme.displayMedium!.fontSize,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1,
+                                color: Colors.black),
                           ),
                         ),
                       ),

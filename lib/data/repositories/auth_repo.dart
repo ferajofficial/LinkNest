@@ -24,8 +24,46 @@ import 'package:link_nest/core/local_storage/app_storage.dart';
 
 //   Future<void> signOut() async => await _auth.signOut();
 
-  
 // }
+// class AuthRepository {
+//   final FirebaseAuth _auth = FirebaseAuth.instance;
+//   final AppStorage _storage;
+
+//   AuthRepository(this._storage);
+
+//   User? get currentUser => _auth.currentUser;
+//   Stream<User?> authStateChanges() => _auth.authStateChanges();
+
+//   Future<void> setOnboardingSeen() async {
+//     await _storage.put(key: "onboarding_seen", value: "true");
+//   }
+
+//   bool hasSeenOnboarding() {
+//     final val = _storage.get(key: "onboarding_seen");
+//     return val == "true";
+//   }
+
+//   Future<void> signOut() async {
+//     await _auth.signOut();
+//     await _storage.clearAllData();
+//   }
+
+//   /// 🔹 Sign up with email & password
+//   Future<User?> signUp(String email, String password, String name) async {
+//   final userCred = await _auth.createUserWithEmailAndPassword(
+//     email: email,
+//     password: password,
+//   );
+
+//   // Update displayName after signup
+//   await userCred.user?.updateDisplayName(name);
+
+//   // Make sure the update is applied
+//   await userCred.user?.reload();
+
+//   return _auth.currentUser;
+// }
+
 class AuthRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final AppStorage _storage;
@@ -45,26 +83,36 @@ class AuthRepository {
   }
 
   Future<void> signOut() async {
+    // Save onboarding status before clearing
+    // final hasSeenOnboarding = this.hasSeenOnboarding();
+
     await _auth.signOut();
-    await _storage.clearAllData();
+    // await _storage.clearAllData();
+
+    // Restore onboarding status after clearing
+    // if (hasSeenOnboarding) {
+    //   await setOnboardingSeen();
+    // }
   }
 
   /// 🔹 Sign up with email & password
   Future<User?> signUp(String email, String password, String name) async {
-  final userCred = await _auth.createUserWithEmailAndPassword(
-    email: email,
-    password: password,
-  );
+    final userCred = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
 
-  // Update displayName after signup
-  await userCred.user?.updateDisplayName(name);
+    // Update displayName after signup
+    await userCred.user?.updateDisplayName(name);
 
-  // Make sure the update is applied
-  await userCred.user?.reload();
+    // Make sure the update is applied
+    await userCred.user?.reload();
 
-  return _auth.currentUser;
-}
+    // Mark onboarding as seen after successful signup
+    await setOnboardingSeen();
 
+    return _auth.currentUser;
+  }
 
   /// 🔹 Login with email & password
   Future<User?> login(String email, String password) async {
@@ -75,5 +123,3 @@ class AuthRepository {
     return userCred.user;
   }
 }
-
-

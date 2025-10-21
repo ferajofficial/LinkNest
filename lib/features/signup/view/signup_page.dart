@@ -123,12 +123,15 @@ class _SigniupPageState extends ConsumerState<SignupPage> with TickerProviderSta
       if (user != null) {
         // ✅ store onboarding as seen
         await repo.setOnboardingSeen();
-
-        context.navigateTo(HomeRoute());
+        if (mounted) {
+          context.navigateTo(HomeRoute());
+        }
       }
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.message ?? "Signup failed")));
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.message ?? "Signup failed")));
+      }
     } finally {
       setState(() => _isLoading = false);
     }
