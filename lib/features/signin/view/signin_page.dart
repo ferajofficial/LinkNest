@@ -307,25 +307,6 @@ class _SigninPageState extends ConsumerState<SigninPage> with TickerProviderStat
   final _passwordCtrl = TextEditingController();
   bool _isLoading = false;
 
-  // void _login() async {
-  //   setState(() => _isLoading = true);
-  //   try {
-  //     final repo = ref.read(authRepositoryProvider);
-  //     final user = await repo.login(_emailCtrl.text, _passwordCtrl.text);
-  //     if (user != null) {
-  //       if (mounted) {
-  //         context.navigateTo(HomeRoute());
-  //       }
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     if (mounted) {
-  //       ScaffoldMessenger.of(context)
-  //           .showSnackBar(SnackBar(content: Text(e.message ?? "Login failed")));
-  //     }
-  //   } finally {
-  //     setState(() => _isLoading = false);
-  //   }
-  // }
   void _login() async {
     setState(() => _isLoading = true);
     try {

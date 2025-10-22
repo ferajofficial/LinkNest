@@ -14,13 +14,3 @@ void main() async {
     const ProviderScope(child: Splasher()),
   );
 }
-
-/*
-    1. Add push notification system [Firebase Push Notification]
-            While App is ni sleep/on/background.
-    2. Add folder system.
-    3. Add search system.
-    4. Add Tagging system.
-          [Youtube,Website,posts,drive etc.]
-
- */

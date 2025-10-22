@@ -133,6 +133,7 @@ class AuthGuard extends AutoRouteGuard {
       HomeRoute.name,
       ProfileRoute.name,
       CounterRoute.name,
+      NavBarRoute.name
     };
 
     // Define auth routes (for non-authenticated users)
@@ -156,7 +157,7 @@ class AuthGuard extends AutoRouteGuard {
     if (authRoutes.contains(routeName)) {
       if (isAuthenticated) {
         // Already logged in - go to home
-        resolver.redirectUntil(HomeRoute());
+        resolver.redirectUntil(NavBarRoute());
       } else {
         resolver.next();
       }
@@ -167,7 +168,7 @@ class AuthGuard extends AutoRouteGuard {
     if (routeName == OnboardingRoute.name) {
       if (isAuthenticated) {
         // Logged in user shouldn't see onboarding
-        resolver.redirectUntil(HomeRoute());
+        resolver.redirectUntil(NavBarRoute());
       } else if (seenOnboarding) {
         // Already seen onboarding - go to signin
         resolver.redirectUntil(SigninRoute());
