@@ -125,7 +125,7 @@ class _SigniupPageState extends ConsumerState<SignupPage> with TickerProviderSta
         // ✅ store onboarding as seen
         await repo.setOnboardingSeen();
         if (mounted) {
-          context.navigateTo(HomeRoute());
+          context.navigateTo(NavBarRoute());
         }
       }
     } on FirebaseAuthException catch (e) {
@@ -435,4 +435,3 @@ class _SigniupPageState extends ConsumerState<SignupPage> with TickerProviderSta
     );
   }
 }
-

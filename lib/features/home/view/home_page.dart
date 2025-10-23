@@ -124,6 +124,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           dateStr.contains(_searchQuery);
     }).toList();
   }
+  // ORIGIANL CODE
   // @override
   // Widget build(BuildContext context) {
   //   return Scaffold(
@@ -646,6 +647,673 @@ class _HomePageState extends ConsumerState<HomePage> {
   //       ),
   //     ),
   //   );
+  // ENHANCED CODE
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     // Modern gradient background
+  //     body: Container(
+  //       decoration: BoxDecoration(
+  //         gradient: LinearGradient(
+  //           begin: Alignment.topLeft,
+  //           end: Alignment.bottomRight,
+  //           colors: [
+  //             Color(0xFF1a1a2e),
+  //             Color(0xFF16213e),
+  //             Color(0xFF0f3460),
+  //           ],
+  //         ),
+  //       ),
+  //       child: Stack(
+  //         alignment: Alignment.center,
+  //         children: [
+  //           !isLoading
+  //               ? SafeArea(
+  //                   child: Column(
+  //                     children: [
+  //                       //Header
+  //                       Container(
+  //                         padding: EdgeInsets.fromLTRB(20, 12, 20, 20),
+  //                         decoration: BoxDecoration(
+  //                           color: Colors.transparent,
+  //                         ),
+  //                         child: Row(
+  //                           children: [
+  //                             // Avatar with gradient border
+  //                             Container(
+  //                               width: 56,
+  //                               height: 56,
+  //                               padding: EdgeInsets.all(3),
+  //                               decoration: BoxDecoration(
+  //                                 shape: BoxShape.circle,
+  //                                 gradient: LinearGradient(
+  //                                   colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+  //                                 ),
+  //                                 boxShadow: [
+  //                                   BoxShadow(
+  //                                     color: Color(0xFF667eea).withOpacity(0.4),
+  //                                     blurRadius: 12,
+  //                                     offset: Offset(0, 4),
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                               child: Padding(
+  //                                 padding: const EdgeInsets.all(2.0),
+  //                                 child: Container(
+  //                                   decoration: BoxDecoration(
+  //                                     shape: BoxShape.circle,
+  //                                     image: DecorationImage(
+  //                                       fit: BoxFit.cover,
+  //                                       image: AssetImage('assets/illustrations/profile.jpg'),
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                             SizedBox(width: 16),
+  //                             // Logout button
+  //                             Spacer(),
+  //                             Container(
+  //                               height: 40,
+  //                               width: 40,
+  //                               decoration: BoxDecoration(
+  //                                 color: Colors.white.withOpacity(0.1),
+  //                                 border: Border.all(
+  //                                   color: Colors.white.withOpacity(0.12),
+  //                                   width: 1,
+  //                                 ),
+  //                                 borderRadius: BorderRadius.circular(8),
+  //                               ),
+  //                               child: IconButton(
+  //                                 onPressed: () {
+  //                                   _logout();
+  //                                 },
+  //                                 icon: Icon(
+  //                                   Icons.logout_rounded,
+  //                                   color: Colors.white.withOpacity(0.7),
+  //                                   size: 18,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+
+  //                       // Main Content
+  //                       Padding(
+  //                         padding: const EdgeInsets.symmetric(horizontal: 16),
+  //                         child: Container(
+  //                           padding: EdgeInsets.all(12),
+  //                           decoration: BoxDecoration(
+  //                             color: Colors.white.withOpacity(0.04),
+  //                             borderRadius: BorderRadius.circular(20),
+  //                             border: Border.all(
+  //                               color: Colors.white.withOpacity(0.1),
+  //                               width: 1,
+  //                             ),
+  //                           ),
+  //                           child: Column(
+  //                             crossAxisAlignment: CrossAxisAlignment.start,
+  //                             children: [
+  //                               Row(
+  //                                 children: [
+  //                                   Container(
+  //                                     padding: EdgeInsets.all(8),
+  //                                     decoration: BoxDecoration(
+  //                                       gradient: LinearGradient(
+  //                                         colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+  //                                       ),
+  //                                       borderRadius: BorderRadius.circular(10),
+  //                                     ),
+  //                                     child: Icon(
+  //                                       Icons.add_circle_outline,
+  //                                       color: Colors.white,
+  //                                       size: 20,
+  //                                     ),
+  //                                   ),
+  //                                   SizedBox(width: 12),
+  //                                   Column(
+  //                                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                                     children: [
+  //                                       Text(
+  //                                         'Add New Link',
+  //                                         style: TextStyle(
+  //                                           fontSize: 18,
+  //                                           color: Colors.white,
+  //                                           fontWeight: FontWeight.w600,
+  //                                         ),
+  //                                       ),
+  //                                       Text(
+  //                                         'Paste your link below',
+  //                                         style: TextStyle(
+  //                                           fontSize: 13,
+  //                                           color: Colors.white38,
+  //                                           fontWeight: FontWeight.w600,
+  //                                         ),
+  //                                       ),
+  //                                     ],
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                               SizedBox(height: 16),
+  //                               // Enhanced TextField
+  //                               Container(
+  //                                 decoration: BoxDecoration(
+  //                                   color: Colors.white.withOpacity(0.08),
+  //                                   borderRadius: BorderRadius.circular(16),
+  //                                   border: Border.all(
+  //                                     color: Colors.white.withOpacity(0.1),
+  //                                     width: 1,
+  //                                   ),
+  //                                 ),
+  //                                 child: TextField(
+  //                                   controller: _controller,
+  //                                   style: TextStyle(
+  //                                     color: Colors.white,
+  //                                     fontSize: 15,
+  //                                   ),
+  //                                   decoration: InputDecoration(
+  //                                     hintText: 'https://www.example.com',
+  //                                     hintStyle: TextStyle(
+  //                                       color: Colors.white.withOpacity(0.4),
+  //                                     ),
+  //                                     prefixIcon: Icon(
+  //                                       Icons.link,
+  //                                       color: Colors.white.withOpacity(0.5),
+  //                                     ),
+  //                                     border: InputBorder.none,
+  //                                     contentPadding: EdgeInsets.symmetric(
+  //                                       vertical: 18,
+  //                                       horizontal: 16,
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                               SizedBox(height: 16),
+  //                               // Enhanced Save Button with gradient
+  //                               Container(
+  //                                 height: 52,
+  //                                 width: double.infinity,
+  //                                 decoration: BoxDecoration(
+  //                                   gradient: LinearGradient(
+  //                                     colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+  //                                   ),
+  //                                   borderRadius: BorderRadius.circular(16),
+  //                                   boxShadow: [
+  //                                     BoxShadow(
+  //                                       color: Color(0xFF667eea).withOpacity(0.4),
+  //                                       blurRadius: 20,
+  //                                       offset: Offset(0, 8),
+  //                                     ),
+  //                                   ],
+  //                                 ),
+  //                                 child: Material(
+  //                                   color: Colors.transparent,
+  //                                   child: InkWell(
+  //                                     borderRadius: BorderRadius.circular(16),
+  //                                     onTap: () async {
+  //                                       if (_controller.text.trim().isNotEmpty) {
+  //                                         try {
+  //                                           await _dbRef.push().set({
+  //                                             "url": _controller.text.trim(),
+  //                                             "timestamp": DateTime.now().toIso8601String()
+  //                                           }).timeout(
+  //                                             Duration(seconds: 10),
+  //                                             onTimeout: () {
+  //                                               throw Exception('Save operation timed out');
+  //                                             },
+  //                                           );
+
+  //                                           if (mounted) {
+  //                                             setState(() {
+  //                                               pastedUrl = _controller.text.trim();
+  //                                             });
+  //                                             _controller.clear();
+  //                                           }
+  //                                         } catch (e) {
+  //                                           print('Error saving link: $e');
+  //                                           if (mounted) {
+  //                                             ScaffoldMessenger.of(context).showSnackBar(
+  //                                               SnackBar(
+  //                                                 content: Text(
+  //                                                     'Failed to save link. Please try again.'),
+  //                                                 behavior: SnackBarBehavior.floating,
+  //                                                 backgroundColor: Colors.red.shade400,
+  //                                                 shape: RoundedRectangleBorder(
+  //                                                   borderRadius: BorderRadius.circular(10),
+  //                                                 ),
+  //                                               ),
+  //                                             );
+  //                                           }
+  //                                         }
+  //                                       }
+  //                                     },
+  //                                     child: Center(
+  //                                       child: Text(
+  //                                         'Save Link',
+  //                                         style: TextStyle(
+  //                                           fontSize: 16,
+  //                                           fontWeight: FontWeight.w600,
+  //                                           color: Colors.white,
+  //                                         ),
+  //                                       ),
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ),
+
+  //                       SizedBox(height: 28),
+
+  //                       // Links Section Header with Animated Search
+  //                       StreamBuilder(
+  //                         stream: _linksStream,
+  //                         builder: (context, snapshot) {
+  //                           int linkCount = 0;
+  //                           if (snapshot.hasData && snapshot.data!.snapshot.value != null) {
+  //                             final data = snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+  //                             linkCount = data.length;
+  //                           }
+
+  //                           return Container(
+  //                             padding: const EdgeInsets.symmetric(horizontal: 16),
+  //                             child: Row(
+  //                               children: [
+  //                                 // Bookmark Icon (only show when search is not active)
+  //                                 if (!_isSearchActive)
+  //                                   Container(
+  //                                     padding: EdgeInsets.all(10),
+  //                                     decoration: BoxDecoration(
+  //                                       color: Colors.white.withOpacity(0.1),
+  //                                       border: Border.all(
+  //                                         color: Colors.white.withOpacity(0.12),
+  //                                         width: 1,
+  //                                       ),
+  //                                       borderRadius: BorderRadius.circular(8),
+  //                                     ),
+  //                                     child: Icon(
+  //                                       Icons.bookmark_border_rounded,
+  //                                       color: Colors.white54,
+  //                                       size: 18,
+  //                                     ),
+  //                                   ),
+  //                                 if (!_isSearchActive) const SizedBox(width: 8),
+
+  //                                 // Expandable content
+  //                                 Expanded(
+  //                                   child: Row(
+  //                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                                     crossAxisAlignment: CrossAxisAlignment.center,
+  //                                     children: [
+  //                                       // Title section or Search bar
+  //                                       Expanded(
+  //                                         child: AnimatedSwitcher(
+  //                                           duration: Duration(milliseconds: 500),
+  //                                           transitionBuilder:
+  //                                               (Widget child, Animation<double> animation) {
+  //                                             return SlideTransition(
+  //                                               position: Tween<Offset>(
+  //                                                 begin: Offset(1.0, 0.0),
+  //                                                 end: Offset.zero,
+  //                                               ).animate(CurvedAnimation(
+  //                                                 parent: animation,
+  //                                                 curve: Curves.easeInOut,
+  //                                               )),
+  //                                               child: FadeTransition(
+  //                                                 opacity: animation,
+  //                                                 child: child,
+  //                                               ),
+  //                                             );
+  //                                           },
+  //                                           child: _isSearchActive
+  //                                               ? Padding(
+  //                                                   padding: const EdgeInsets.all(10.0),
+  //                                                   child: Container(
+  //                                                     height: 40,
+  //                                                     padding: EdgeInsets.zero,
+  //                                                     key: ValueKey('search-bar'),
+  //                                                     decoration: BoxDecoration(
+  //                                                       color: Colors.white.withOpacity(0.08),
+  //                                                       borderRadius: BorderRadius.circular(8),
+  //                                                       border: Border.all(
+  //                                                         color: Colors.white.withOpacity(0.1),
+  //                                                         width: 1,
+  //                                                       ),
+  //                                                     ),
+  //                                                     child: TextField(
+  //                                                       controller: _searchController,
+  //                                                       autofocus: true,
+  //                                                       style: TextStyle(
+  //                                                         color: Colors.white,
+  //                                                         fontSize: 14,
+  //                                                       ),
+  //                                                       decoration: InputDecoration(
+  //                                                         hintText:
+  //                                                             'Search by name, link or date...',
+  //                                                         hintStyle: TextStyle(
+  //                                                           color: Colors.white.withOpacity(0.4),
+  //                                                           fontSize: 13,
+  //                                                         ),
+  //                                                         prefixIcon: Icon(
+  //                                                           Icons.search,
+  //                                                           color: Colors.white.withOpacity(0.5),
+  //                                                           size: 20,
+  //                                                         ),
+  //                                                         suffixIcon: _searchQuery.isNotEmpty
+  //                                                             ? IconButton(
+  //                                                                 icon: Icon(
+  //                                                                   Icons.clear,
+  //                                                                   color: Colors.white
+  //                                                                       .withOpacity(0.5),
+  //                                                                   size: 20,
+  //                                                                 ),
+  //                                                                 onPressed: () {
+  //                                                                   _searchController.clear();
+  //                                                                   setState(() {
+  //                                                                     _searchQuery = '';
+  //                                                                     _isSearchActive = false;
+  //                                                                   });
+  //                                                                 },
+  //                                                               )
+  //                                                             : null,
+  //                                                         border: InputBorder.none,
+  //                                                         contentPadding: EdgeInsets.symmetric(
+  //                                                           vertical: 12,
+  //                                                           horizontal: 12,
+  //                                                         ),
+  //                                                       ),
+  //                                                     ),
+  //                                                   ),
+  //                                                 )
+  //                                               : Row(
+  //                                                   key: ValueKey('title-section'),
+  //                                                   mainAxisAlignment:
+  //                                                       MainAxisAlignment.spaceBetween,
+  //                                                   children: [
+  //                                                     Column(
+  //                                                       crossAxisAlignment:
+  //                                                           CrossAxisAlignment.start,
+  //                                                       children: [
+  //                                                         Text(
+  //                                                           'Recently Saved',
+  //                                                           style: const TextStyle(
+  //                                                             fontSize: 18,
+  //                                                             color: Colors.white,
+  //                                                             fontWeight: FontWeight.w600,
+  //                                                           ),
+  //                                                         ),
+  //                                                         Text(
+  //                                                           '$linkCount links',
+  //                                                           style: const TextStyle(
+  //                                                             fontSize: 14,
+  //                                                             color: Colors.white60,
+  //                                                             fontWeight: FontWeight.w600,
+  //                                                           ),
+  //                                                         ),
+  //                                                       ],
+  //                                                     ),
+  //                                                   ],
+  //                                                 ),
+  //                                         ),
+  //                                       ),
+
+  //                                       // Search Icon Button
+  //                                       GestureDetector(
+  //                                         onTap: () {
+  //                                           setState(() {
+  //                                             _isSearchActive = !_isSearchActive;
+  //                                             if (!_isSearchActive) {
+  //                                               _searchController.clear();
+  //                                               _searchQuery = '';
+  //                                             }
+  //                                           });
+  //                                         },
+  //                                         child: Container(
+  //                                           padding: EdgeInsets.all(10),
+  //                                           decoration: BoxDecoration(
+  //                                             color: _isSearchActive
+  //                                                 ? Color(0xFF667eea).withOpacity(0.3)
+  //                                                 : Colors.white.withOpacity(0.1),
+  //                                             border: Border.all(
+  //                                               color: _isSearchActive
+  //                                                   ? Color(0xFF667eea).withOpacity(0.5)
+  //                                                   : Colors.white.withOpacity(0.12),
+  //                                               width: 1,
+  //                                             ),
+  //                                             borderRadius: BorderRadius.circular(8),
+  //                                           ),
+  //                                           child: Icon(
+  //                                             _isSearchActive ? Icons.close : Icons.search_rounded,
+  //                                             color: Colors.white54,
+  //                                             size: 18,
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     ],
+  //                                   ),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           );
+  //                         },
+  //                       ),
+
+  //                       SizedBox(height: 16),
+
+  //                       // Enhanced Links List with Search Filter
+  //                       StreamBuilder(
+  //                         stream: _linksStream,
+  //                         builder: (context, snapshot) {
+  //                           if (snapshot.hasError) {
+  //                             return Container(
+  //                               padding: EdgeInsets.all(40),
+  //                               child: Center(
+  //                                 child: Text(
+  //                                   'Something went wrong',
+  //                                   style: TextStyle(color: Colors.white70),
+  //                                 ),
+  //                               ),
+  //                             );
+  //                           }
+
+  //                           if (snapshot.connectionState == ConnectionState.waiting) {
+  //                             return Container(
+  //                               padding: EdgeInsets.all(40),
+  //                               child: Center(
+  //                                 child: CircularProgressIndicator(
+  //                                   color: Color(0xFF667eea),
+  //                                 ),
+  //                               ),
+  //                             );
+  //                           }
+
+  //                           final data = snapshot.data!.snapshot.value as Map<dynamic, dynamic>?;
+
+  //                           if (data == null) {
+  //                             return _noDataHandler();
+  //                           }
+
+  //                           final items = data.entries.toList();
+  //                           final filteredItems = _filterLinks(items);
+
+  //                           // Show "no results" message if search is active but no matches
+  //                           if (_searchQuery.isNotEmpty && filteredItems.isEmpty) {
+  //                             return Expanded(
+  //                               child: Center(
+  //                                 child: Column(
+  //                                   mainAxisAlignment: MainAxisAlignment.center,
+  //                                   children: [
+  //                                     Icon(
+  //                                       Icons.search_off,
+  //                                       color: Colors.white38,
+  //                                       size: 64,
+  //                                     ),
+  //                                     SizedBox(height: 16),
+  //                                     Text(
+  //                                       'No results found',
+  //                                       style: TextStyle(
+  //                                         color: Colors.white70,
+  //                                         fontSize: 16,
+  //                                         fontWeight: FontWeight.w600,
+  //                                       ),
+  //                                     ),
+  //                                     SizedBox(height: 8),
+  //                                     Text(
+  //                                       'Try searching with different keywords',
+  //                                       style: TextStyle(
+  //                                         color: Colors.white38,
+  //                                         fontSize: 13,
+  //                                       ),
+  //                                     ),
+  //                                   ],
+  //                                 ),
+  //                               ),
+  //                             );
+  //                           }
+
+  //                           return Expanded(
+  //                             child: ListView.builder(
+  //                               shrinkWrap: true,
+  //                               physics: AlwaysScrollableScrollPhysics(),
+  //                               itemCount: filteredItems.length,
+  //                               itemBuilder: (context, index) {
+  //                                 final link = filteredItems[index].value["url"];
+  //                                 final key = filteredItems[index].key;
+
+  //                                 return Padding(
+  //                                   padding: const EdgeInsets.symmetric(horizontal: 16),
+  //                                   child: Container(
+  //                                     margin: EdgeInsets.symmetric(vertical: 6),
+  //                                     decoration: BoxDecoration(
+  //                                       color: Colors.white.withOpacity(0.08),
+  //                                       borderRadius: BorderRadius.circular(16),
+  //                                       border: Border.all(
+  //                                         color: Colors.white.withOpacity(0.1),
+  //                                       ),
+  //                                     ),
+  //                                     child: Material(
+  //                                       color: Colors.transparent,
+  //                                       child: InkWell(
+  //                                         borderRadius: BorderRadius.circular(16),
+  //                                         onTap: () {
+  //                                           // Add your tap logic here
+  //                                         },
+  //                                         child: Padding(
+  //                                           padding: EdgeInsets.all(16),
+  //                                           child: Row(
+  //                                             children: [
+  //                                               // Icon Container
+  //                                               Container(
+  //                                                 width: 48,
+  //                                                 height: 48,
+  //                                                 decoration: BoxDecoration(
+  //                                                   gradient: LinearGradient(
+  //                                                     begin: Alignment.topLeft,
+  //                                                     colors: [
+  //                                                       Colors.blueAccent,
+  //                                                       Colors.deepPurpleAccent
+  //                                                     ],
+  //                                                   ),
+  //                                                   borderRadius: BorderRadius.circular(12),
+  //                                                 ),
+  //                                                 child: Icon(
+  //                                                   Icons.link,
+  //                                                   color: Colors.white,
+  //                                                   size: 24,
+  //                                                 ),
+  //                                               ),
+  //                                               SizedBox(width: 14),
+  //                                               // Link Text
+  //                                               Expanded(
+  //                                                 child: Column(
+  //                                                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                                                   children: [
+  //                                                     Text(
+  //                                                       _extractDomain(link ?? ""),
+  //                                                       style: TextStyle(
+  //                                                         color: Colors.white,
+  //                                                         fontSize: 15,
+  //                                                         fontWeight: FontWeight.w600,
+  //                                                       ),
+  //                                                     ),
+  //                                                     SizedBox(height: 4),
+  //                                                     Text(
+  //                                                       link ?? "",
+  //                                                       style: TextStyle(
+  //                                                         color: Colors.white.withOpacity(0.5),
+  //                                                         fontSize: 13,
+  //                                                       ),
+  //                                                       maxLines: 1,
+  //                                                       overflow: TextOverflow.ellipsis,
+  //                                                     ),
+  //                                                   ],
+  //                                                 ),
+  //                                               ),
+  //                                               // Action Button
+  //                                               Container(
+  //                                                 padding: EdgeInsets.all(8),
+  //                                                 decoration: BoxDecoration(
+  //                                                   color: Colors.white.withOpacity(0.1),
+  //                                                   borderRadius: BorderRadius.circular(8),
+  //                                                 ),
+  //                                                 child: Icon(
+  //                                                   Icons.open_in_new,
+  //                                                   color: Colors.white.withOpacity(0.7),
+  //                                                   size: 18,
+  //                                                 ),
+  //                                               ),
+  //                                               SizedBox(width: 8),
+  //                                               GestureDetector(
+  //                                                 onTap: () async {
+  //                                                   try {
+  //                                                     await _dbRef.child(key).remove().timeout(
+  //                                                           Duration(seconds: 5),
+  //                                                         );
+  //                                                   } catch (e) {
+  //                                                     print('Error deleting link: $e');
+  //                                                   }
+  //                                                 },
+  //                                                 child: Container(
+  //                                                   padding: EdgeInsets.all(8),
+  //                                                   decoration: BoxDecoration(
+  //                                                     color: Colors.redAccent.withOpacity(0.26),
+  //                                                     borderRadius: BorderRadius.circular(8),
+  //                                                   ),
+  //                                                   child: Icon(
+  //                                                     Icons.delete_outline_rounded,
+  //                                                     color: Colors.red,
+  //                                                     size: 18,
+  //                                                   ),
+  //                                                 ),
+  //                                               ),
+  //                                             ],
+  //                                           ),
+  //                                         ),
+  //                                       ),
+  //                                     ),
+  //                                   ),
+  //                                 );
+  //                               },
+  //                             ),
+  //                           );
+  //                         },
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 )
+  //               : Center(
+  //                   child: Text(
+  //                     'Loading...',
+  //                     style: TextStyle(color: Colors.white70),
+  //                   ),
+  //                 ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
   // }
   @override
   Widget build(BuildContext context) {
@@ -855,7 +1523,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           try {
                                             await _dbRef.push().set({
                                               "url": _controller.text.trim(),
-                                              "timestamp": DateTime.now().toIso8601String()
+                                              "timestamp": DateTime.now().toIso8601String(),
+                                              "collection":
+                                                  "", // Empty by default, will be set later
+                                              "tags": [], // Empty array by default
                                             }).timeout(
                                               Duration(seconds: 10),
                                               onTimeout: () {
@@ -991,7 +1662,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                                         ),
                                                         decoration: InputDecoration(
                                                           hintText:
-                                                              'Search by name, link or date...',
+                                                              'Search by name, link, tags or date...',
                                                           hintStyle: TextStyle(
                                                             color: Colors.white.withOpacity(0.4),
                                                             fontSize: 13,
@@ -1107,25 +1778,32 @@ class _HomePageState extends ConsumerState<HomePage> {
                           stream: _linksStream,
                           builder: (context, snapshot) {
                             if (snapshot.hasError) {
-                              return Container(
-                                padding: EdgeInsets.all(40),
-                                child: Center(
-                                  child: Text(
-                                    'Something went wrong',
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+
+                                   SizedBox(
+                                    height: MediaQuery.sizeOf(context).height * 0.14,
+                                  ),
+                                  Text(
+                                    'Oops!\nSomething went wrong.\nPlease Try Again',
                                     style: TextStyle(color: Colors.white70),
                                   ),
-                                ),
+                                ],
                               );
                             }
 
                             if (snapshot.connectionState == ConnectionState.waiting) {
-                              return Container(
-                                padding: EdgeInsets.all(40),
-                                child: Center(
-                                  child: CircularProgressIndicator(
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: MediaQuery.sizeOf(context).height * 0.14,
+                                  ),
+                                  CircularProgressIndicator(
                                     color: Color(0xFF667eea),
                                   ),
-                                ),
+                                ],
                               );
                             }
 
@@ -1136,51 +1814,35 @@ class _HomePageState extends ConsumerState<HomePage> {
                             }
 
                             final items = data.entries.toList();
+
+                            // Sort by timestamp (most recent first)
+                            items.sort((a, b) {
+                              final aTime = a.value["timestamp"] ?? "";
+                              final bTime = b.value["timestamp"] ?? "";
+                              return bTime.compareTo(aTime);
+                            });
+
+                            // Filter links based on search query (searches ALL links)
                             final filteredItems = _filterLinks(items);
+
+                            // If searching, show all filtered results
+                            // If not searching, show only 4 most recent
+                            final displayItems =
+                                _searchQuery.isNotEmpty ? filteredItems : items.take(4).toList();
 
                             // Show "no results" message if search is active but no matches
                             if (_searchQuery.isNotEmpty && filteredItems.isEmpty) {
-                              return Expanded(
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.search_off,
-                                        color: Colors.white38,
-                                        size: 64,
-                                      ),
-                                      SizedBox(height: 16),
-                                      Text(
-                                        'No results found',
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      SizedBox(height: 8),
-                                      Text(
-                                        'Try searching with different keywords',
-                                        style: TextStyle(
-                                          color: Colors.white38,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
+                              return _noSearchFounds(context);
                             }
 
                             return Expanded(
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 physics: AlwaysScrollableScrollPhysics(),
-                                itemCount: filteredItems.length,
+                                itemCount: displayItems.length,
                                 itemBuilder: (context, index) {
-                                  final link = filteredItems[index].value["url"];
-                                  final key = filteredItems[index].key;
+                                  final link = displayItems[index].value["url"];
+                                  final key = displayItems[index].key;
 
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -1304,15 +1966,66 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   )
                 : Center(
-                    child: Text(
-                      'Loading...',
-                      style: TextStyle(color: Colors.white70),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Loading...',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white70,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        CircularProgressIndicator(
+                          color: Color(0xFF667eea),
+                        )
+                      ],
                     ),
                   ),
           ],
         ),
       ),
     );
+  }
+
+  Expanded _noSearchFounds(BuildContext context) {
+    return Expanded(
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                     SizedBox(
+                                  height: MediaQuery.sizeOf(context).height * 0.14,
+                                ),
+                                    Icon(
+                                      Icons.search_off,
+                                      color: Colors.white38,
+                                      size: 64,
+                                    ),
+                                    SizedBox(height: 16),
+                                    Text(
+                                      'No results found',
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      'Try searching with different keywords',
+                                      style: TextStyle(
+                                        color: Colors.white38,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
   }
 }
 

@@ -316,7 +316,7 @@ class _SigninPageState extends ConsumerState<SigninPage> with TickerProviderStat
       if (user != null && mounted) {
         // Wait a bit for auth state to update
         await Future.delayed(const Duration(milliseconds: 100));
-        context.router.replaceAll([HomeRoute()]);
+        context.router.replaceAll([NavBarRoute()]);
       }
       setState(() {
         _isLoading = false;
@@ -404,6 +404,7 @@ class _SigninPageState extends ConsumerState<SigninPage> with TickerProviderStat
                           // User name field - animated
                           _buildAnimatedWidget(
                             TextField(
+                              style: TextStyle(color: Colors.black54),
                               controller: _emailCtrl,
                               decoration: InputDecoration(
                                 hintText: 'Your user name/email',
@@ -425,6 +426,7 @@ class _SigninPageState extends ConsumerState<SigninPage> with TickerProviderStat
                           // Password field - animated
                           _buildAnimatedWidget(
                             TextField(
+                              style: TextStyle(color: Colors.black54),
                               controller: _passwordCtrl,
                               obscureText: true,
                               decoration: InputDecoration(
