@@ -12,7 +12,7 @@
 import 'package:auto_route/auto_route.dart' as _i10;
 import 'package:link_nest/features/counter/view/counter_page.dart'
     deferred as _i2;
-import 'package:link_nest/features/folder_collections/folder_collection_page.dart'
+import 'package:link_nest/features/collections/collection_page.dart'
     as _i1;
 import 'package:link_nest/features/home/view/home_page.dart' deferred as _i3;
 import 'package:link_nest/features/nav_bar/nav_bar_page.dart' as _i4;

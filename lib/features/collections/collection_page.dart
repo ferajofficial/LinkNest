@@ -663,19 +663,52 @@ class _CollectionPageState extends State<CollectionPage> {
           ),
         ),
       ),
+      // floatingActionButton: GlowingFab(onPressed: _showCreateCollectionModal),
+
+      // GLOWING BUTTON
       floatingActionButton: Padding(
         padding: EdgeInsets.only(
-            bottom: MediaQuery.sizeOf(context).height * 0.14), // Padding to avoid bottom nav
-        child: FloatingActionButton.extended(
-          onPressed: _showCreateCollectionModal,
-          backgroundColor: Color(0xFF667eea),
-          elevation: 8,
-          icon: Icon(Icons.add, color: Colors.white),
-          label: Text(
-            'New Collection',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
+          bottom: MediaQuery.sizeOf(context).height * 0.14,
+        ),
+        child: Container(
+          height: 40,
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(30),
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xFF667eea),
+                Color(0xFF764ba2),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF667eea).withOpacity(0.6),
+                blurRadius: 10,
+                spreadRadius: 2,
+                offset: const Offset(0, 4),
+              ),
+              BoxShadow(
+                color: const Color(0xFF764ba2).withOpacity(0.4),
+                blurRadius: 30,
+                spreadRadius: 4,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: FloatingActionButton.extended(
+            onPressed: _showCreateCollectionModal,
+            backgroundColor: Colors.transparent, // Let gradient show
+            elevation: 0, // Remove default shadow
+            icon: const Icon(Icons.add, color: Colors.white),
+            label: const Text(
+              'Create One',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ),
@@ -802,3 +835,23 @@ class _CollectionPageState extends State<CollectionPage> {
     );
   }
 }
+
+// NORMAL BUTTON 
+  // floatingActionButton: Padding(
+      //   padding: EdgeInsets.only(
+      //       bottom: MediaQuery.sizeOf(context).height * 0.14), // Padding to avoid bottom nav
+      //   child: FloatingActionButton.extended(
+      //     onPressed: _showCreateCollectionModal,
+      //     backgroundColor: Color(0xFF667eea),
+      //     elevation: 8,
+      //     icon: Icon(Icons.add, color: Colors.white),
+      //     label: Text(
+      //       'New Collection',
+      //       style: TextStyle(
+      //         color: Colors.white,
+      //         fontWeight: FontWeight.w600,
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      

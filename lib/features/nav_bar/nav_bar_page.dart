@@ -1,6 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
-import 'package:link_nest/features/folder_collections/folder_collection_page.dart';
+import 'package:link_nest/features/collections/collection_page.dart';
 import 'package:link_nest/features/home/view/home_page.dart';
 import 'package:link_nest/features/tags/tags_page.dart';
 import 'package:liquid_glass_bottom_bar/liquid_glass_bottom_bar.dart';
