@@ -20,7 +20,6 @@ dependencies:
     sdk: flutter
 
   flutter_displaymode: ^0.6.0
-  flutter_link_previewer: ^4.1.2
   flutter_localizations:
     sdk: flutter
   flutter_riverpod: ^2.6.1
