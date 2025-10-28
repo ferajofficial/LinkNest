@@ -20,895 +20,6 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-// class _HomePageState extends ConsumerState<HomePage> {
-//   final DatabaseReference _dbRef = FirebaseDatabase.instance.ref("links");
-//   final TextEditingController _controller = TextEditingController();
-//   String? pastedUrl;
-
-//   // Single stream that both StreamBuilders will share
-//   late final Stream<DatabaseEvent> _linksStream;
-
-//   // New variables for search functionality
-//   final TextEditingController _searchController = TextEditingController();
-//   bool _isSearchActive = false;
-//   Timer? _debounceTimer;
-//   String _searchQuery = '';
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     // Create a single broadcast stream that can be listened to multiple times
-//     _linksStream = _dbRef.onValue.asBroadcastStream();
-//     // Add search listener
-//     _searchController.addListener(_onSearchChanged);
-//   }
-
-//   @override
-//   void dispose() {
-//     _searchController.dispose();
-//     _debounceTimer?.cancel();
-//     _controller.dispose();
-//     _controller.dispose();
-//     super.dispose();
-//   }
-
-// //TODO: logout bug should be fixed .
-//   bool isLoading = false;
-//   void _logout() async {
-//     try {
-//       setState(() {
-//         isLoading = true;
-//       });
-//       final repo = ref.read(authRepositoryProvider);
-//       await repo.signOut();
-//       talker.debug('LOGGING OUT');
-
-//       if (mounted) {
-//         await Future.delayed(const Duration(seconds: 2));
-//         context.router.replaceAll([SigninRoute()]);
-//       }
-//       setState(() {
-//         isLoading = false;
-//       });
-//     } catch (e) {
-//       talker.debug('DEBUG CATCH :::::: $e');
-//     } finally {
-//       setState(() {
-//         isLoading = false;
-//       });
-//     }
-//   }
-
-//   // Debounced search handler
-//   void _onSearchChanged() {
-//     if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
-
-//     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-//       if (mounted) {
-//         setState(() {
-//           _searchQuery = _searchController.text.toLowerCase().trim();
-
-//           // Close search bar if query is empty
-//           if (_searchQuery.isEmpty) {
-//             _isSearchActive = false;
-//           }
-//         });
-//       }
-//     });
-//   }
-
-//   // Filter links based on search query
-//   List<MapEntry<dynamic, dynamic>> _filterLinks(List<MapEntry<dynamic, dynamic>> items) {
-//     if (_searchQuery.isEmpty) {
-//       return items;
-//     }
-
-//     return items.where((item) {
-//       final url = (item.value["url"] ?? "").toString().toLowerCase();
-//       final domain = _extractDomain(item.value["url"] ?? "").toLowerCase();
-//       final timestamp = item.value["timestamp"] ?? "";
-
-//       // Format date for searching
-//       String dateStr = "";
-//       try {
-//         if (timestamp.isNotEmpty) {
-//           final date = DateTime.parse(timestamp);
-//           dateStr = "${date.day}/${date.month}/${date.year}".toLowerCase();
-//         }
-//       } catch (e) {
-//         // If date parsing fails, continue without date search
-//       }
-
-//       // Search in domain, url, and date
-//       return domain.contains(_searchQuery) ||
-//           url.contains(_searchQuery) ||
-//           dateStr.contains(_searchQuery);
-//     }).toList();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       // Modern gradient background
-//       body: Container(
-//         decoration: BoxDecoration(
-//           gradient: LinearGradient(
-//             begin: Alignment.topLeft,
-//             end: Alignment.bottomRight,
-//             colors: [
-//               Color(0xFF1a1a2e),
-//               Color(0xFF16213e),
-//               Color(0xFF0f3460),
-//             ],
-//           ),
-//         ),
-//         child: Stack(
-//           alignment: Alignment.center,
-//           children: [
-//             !isLoading
-//                 ? SafeArea(
-//                     child: Column(
-//                       children: [
-//                         //Header
-//                         Container(
-//                           padding: EdgeInsets.fromLTRB(20, 12, 20, 20),
-//                           decoration: BoxDecoration(
-//                             color: Colors.transparent,
-//                           ),
-//                           child: Row(
-//                             children: [
-//                               // Avatar with gradient border
-//                               Container(
-//                                 width: 56,
-//                                 height: 56,
-//                                 padding: EdgeInsets.all(3),
-//                                 decoration: BoxDecoration(
-//                                   shape: BoxShape.circle,
-//                                   gradient: LinearGradient(
-//                                     colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-//                                   ),
-//                                   boxShadow: [
-//                                     BoxShadow(
-//                                       color: Color(0xFF667eea).withOpacity(0.4),
-//                                       blurRadius: 12,
-//                                       offset: Offset(0, 4),
-//                                     ),
-//                                   ],
-//                                 ),
-//                                 child: Padding(
-//                                   padding: const EdgeInsets.all(2.0),
-//                                   child: Container(
-//                                     decoration: BoxDecoration(
-//                                       shape: BoxShape.circle,
-//                                       image: DecorationImage(
-//                                         fit: BoxFit.cover,
-//                                         image: AssetImage('assets/illustrations/profile.jpg'),
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 ),
-//                               ),
-//                               SizedBox(width: 16),
-//                               // Logout button
-//                               Spacer(),
-//                               Container(
-//                                 height: 40,
-//                                 width: 40,
-//                                 decoration: BoxDecoration(
-//                                   color: Colors.white.withOpacity(0.1),
-//                                   border: Border.all(
-//                                     color: Colors.white.withOpacity(0.12),
-//                                     width: 1,
-//                                   ),
-//                                   borderRadius: BorderRadius.circular(8),
-//                                 ),
-//                                 child: IconButton(
-//                                   onPressed: () {
-//                                     _logout();
-//                                   },
-//                                   icon: Icon(
-//                                     Icons.logout_rounded,
-//                                     color: Colors.white.withOpacity(0.7),
-//                                     size: 18,
-//                                   ),
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-
-//                         // Main Content
-//                         Padding(
-//                           padding: const EdgeInsets.symmetric(horizontal: 16),
-//                           child: Container(
-//                             padding: EdgeInsets.all(12),
-//                             decoration: BoxDecoration(
-//                               color: Colors.white.withOpacity(0.04),
-//                               borderRadius: BorderRadius.circular(20),
-//                               border: Border.all(
-//                                 color: Colors.white.withOpacity(0.1),
-//                                 width: 1,
-//                               ),
-//                             ),
-//                             child: Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 Row(
-//                                   children: [
-//                                     Container(
-//                                       padding: EdgeInsets.all(8),
-//                                       decoration: BoxDecoration(
-//                                         gradient: LinearGradient(
-//                                           colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-//                                         ),
-//                                         borderRadius: BorderRadius.circular(10),
-//                                       ),
-//                                       child: Icon(
-//                                         Icons.add_circle_outline,
-//                                         color: Colors.white,
-//                                         size: 20,
-//                                       ),
-//                                     ),
-//                                     SizedBox(width: 12),
-//                                     Column(
-//                                       crossAxisAlignment: CrossAxisAlignment.start,
-//                                       children: [
-//                                         Text(
-//                                           'Add New Link',
-//                                           style: TextStyle(
-//                                             fontSize: 18,
-//                                             color: Colors.white,
-//                                             fontWeight: FontWeight.w600,
-//                                           ),
-//                                         ),
-//                                         Text(
-//                                           'Paste your link below',
-//                                           style: TextStyle(
-//                                             fontSize: 13,
-//                                             color: Colors.white38,
-//                                             fontWeight: FontWeight.w600,
-//                                           ),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   ],
-//                                 ),
-//                                 SizedBox(height: 16),
-//                                 // Enhanced TextField
-//                                 Container(
-//                                   decoration: BoxDecoration(
-//                                     color: Colors.white.withOpacity(0.08),
-//                                     borderRadius: BorderRadius.circular(16),
-//                                     border: Border.all(
-//                                       color: Colors.white.withOpacity(0.1),
-//                                       width: 1,
-//                                     ),
-//                                   ),
-//                                   child: TextField(
-//                                     controller: _controller,
-//                                     style: TextStyle(
-//                                       color: Colors.white,
-//                                       fontSize: 15,
-//                                     ),
-//                                     decoration: InputDecoration(
-//                                       hintText: 'https://www.example.com',
-//                                       hintStyle: TextStyle(
-//                                         color: Colors.white.withOpacity(0.4),
-//                                       ),
-//                                       prefixIcon: Icon(
-//                                         Icons.link,
-//                                         color: Colors.white.withOpacity(0.5),
-//                                       ),
-//                                       border: InputBorder.none,
-//                                       contentPadding: EdgeInsets.symmetric(
-//                                         vertical: 18,
-//                                         horizontal: 16,
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 ),
-//                                 SizedBox(height: 16),
-//                                 // Enhanced Save Button with gradient
-//                                 Container(
-//                                   height: 52,
-//                                   width: double.infinity,
-//                                   decoration: BoxDecoration(
-//                                     gradient: LinearGradient(
-//                                       colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-//                                     ),
-//                                     borderRadius: BorderRadius.circular(16),
-//                                     boxShadow: [
-//                                       BoxShadow(
-//                                         color: Color(0xFF667eea).withOpacity(0.4),
-//                                         blurRadius: 20,
-//                                         offset: Offset(0, 8),
-//                                       ),
-//                                     ],
-//                                   ),
-//                                   child: Material(
-//                                     color: Colors.transparent,
-//                                     child: InkWell(
-//                                       borderRadius: BorderRadius.circular(16),
-//                                       onTap: () async {
-//                                         if (_controller.text.trim().isNotEmpty) {
-//                                           try {
-//                                             await _dbRef.push().set({
-//                                               "url": _controller.text.trim(),
-//                                               "timestamp": DateTime.now().toIso8601String(),
-//                                               "collection":
-//                                                   "", // Empty by default, will be set later
-//                                               "tags": [], // Empty array by default
-//                                             }).timeout(
-//                                               Duration(seconds: 10),
-//                                               onTimeout: () {
-//                                                 throw Exception('Save operation timed out');
-//                                               },
-//                                             );
-
-//                                             if (mounted) {
-//                                               setState(() {
-//                                                 pastedUrl = _controller.text.trim();
-//                                               });
-//                                               _controller.clear();
-//                                             }
-//                                           } catch (e) {
-//                                             print('Error saving link: $e');
-//                                             if (mounted) {
-//                                               ScaffoldMessenger.of(context).showSnackBar(
-//                                                 SnackBar(
-//                                                   content: Text(
-//                                                       'Failed to save link. Please try again.'),
-//                                                   behavior: SnackBarBehavior.floating,
-//                                                   backgroundColor: Colors.red.shade400,
-//                                                   shape: RoundedRectangleBorder(
-//                                                     borderRadius: BorderRadius.circular(10),
-//                                                   ),
-//                                                 ),
-//                                               );
-//                                             }
-//                                           }
-//                                         }
-//                                       },
-//                                       child: Center(
-//                                         child: Text(
-//                                           'Save Link',
-//                                           style: TextStyle(
-//                                             fontSize: 16,
-//                                             fontWeight: FontWeight.w600,
-//                                             color: Colors.white,
-//                                           ),
-//                                         ),
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                         ),
-
-//                         SizedBox(height: 28),
-
-//                         // Links Section Header with Animated Search
-//                         StreamBuilder(
-//                           stream: _linksStream,
-//                           builder: (context, snapshot) {
-//                             int linkCount = 0;
-//                             if (snapshot.hasData && snapshot.data!.snapshot.value != null) {
-//                               final data = snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
-//                               linkCount = data.length;
-//                             }
-
-//                             return Container(
-//                               padding: const EdgeInsets.symmetric(horizontal: 16),
-//                               child: Row(
-//                                 children: [
-//                                   // Bookmark Icon (only show when search is not active)
-//                                   if (!_isSearchActive)
-//                                     Container(
-//                                       padding: EdgeInsets.all(10),
-//                                       decoration: BoxDecoration(
-//                                         color: Colors.white.withOpacity(0.1),
-//                                         border: Border.all(
-//                                           color: Colors.white.withOpacity(0.12),
-//                                           width: 1,
-//                                         ),
-//                                         borderRadius: BorderRadius.circular(8),
-//                                       ),
-//                                       child: Icon(
-//                                         Icons.bookmark_border_rounded,
-//                                         color: Colors.white54,
-//                                         size: 18,
-//                                       ),
-//                                     ),
-//                                   if (!_isSearchActive) const SizedBox(width: 8),
-
-//                                   // Expandable content
-//                                   Expanded(
-//                                     child: Row(
-//                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                                       crossAxisAlignment: CrossAxisAlignment.center,
-//                                       children: [
-//                                         // Title section or Search bar
-//                                         Expanded(
-//                                           child: AnimatedSwitcher(
-//                                             duration: Duration(milliseconds: 500),
-//                                             transitionBuilder:
-//                                                 (Widget child, Animation<double> animation) {
-//                                               return SlideTransition(
-//                                                 position: Tween<Offset>(
-//                                                   begin: Offset(1.0, 0.0),
-//                                                   end: Offset.zero,
-//                                                 ).animate(CurvedAnimation(
-//                                                   parent: animation,
-//                                                   curve: Curves.easeInOut,
-//                                                 )),
-//                                                 child: FadeTransition(
-//                                                   opacity: animation,
-//                                                   child: child,
-//                                                 ),
-//                                               );
-//                                             },
-//                                             child: _isSearchActive
-//                                                 ? Padding(
-//                                                     padding: const EdgeInsets.all(10.0),
-//                                                     child: Container(
-//                                                       height: 40,
-//                                                       padding: EdgeInsets.zero,
-//                                                       key: ValueKey('search-bar'),
-//                                                       decoration: BoxDecoration(
-//                                                         color: Colors.white.withOpacity(0.08),
-//                                                         borderRadius: BorderRadius.circular(8),
-//                                                         border: Border.all(
-//                                                           color: Colors.white.withOpacity(0.1),
-//                                                           width: 1,
-//                                                         ),
-//                                                       ),
-//                                                       child: TextField(
-//                                                         controller: _searchController,
-//                                                         autofocus: true,
-//                                                         style: TextStyle(
-//                                                           color: Colors.white,
-//                                                           fontSize: 14,
-//                                                         ),
-//                                                         decoration: InputDecoration(
-//                                                           hintText:
-//                                                               'Search by name, link, tags or date...',
-//                                                           hintStyle: TextStyle(
-//                                                             color: Colors.white.withOpacity(0.4),
-//                                                             fontSize: 13,
-//                                                           ),
-//                                                           prefixIcon: Icon(
-//                                                             Icons.search,
-//                                                             color: Colors.white.withOpacity(0.5),
-//                                                             size: 20,
-//                                                           ),
-//                                                           suffixIcon: _searchQuery.isNotEmpty
-//                                                               ? IconButton(
-//                                                                   icon: Icon(
-//                                                                     Icons.clear,
-//                                                                     color: Colors.white
-//                                                                         .withOpacity(0.5),
-//                                                                     size: 20,
-//                                                                   ),
-//                                                                   onPressed: () {
-//                                                                     _searchController.clear();
-//                                                                     setState(() {
-//                                                                       _searchQuery = '';
-//                                                                       _isSearchActive = false;
-//                                                                     });
-//                                                                   },
-//                                                                 )
-//                                                               : null,
-//                                                           border: InputBorder.none,
-//                                                           contentPadding: EdgeInsets.symmetric(
-//                                                             vertical: 12,
-//                                                             horizontal: 12,
-//                                                           ),
-//                                                         ),
-//                                                       ),
-//                                                     ),
-//                                                   )
-//                                                 : Row(
-//                                                     key: ValueKey('title-section'),
-//                                                     mainAxisAlignment:
-//                                                         MainAxisAlignment.spaceBetween,
-//                                                     children: [
-//                                                       Column(
-//                                                         crossAxisAlignment:
-//                                                             CrossAxisAlignment.start,
-//                                                         children: [
-//                                                           Text(
-//                                                             'Recently Saved',
-//                                                             style: const TextStyle(
-//                                                               fontSize: 18,
-//                                                               color: Colors.white,
-//                                                               fontWeight: FontWeight.w600,
-//                                                             ),
-//                                                           ),
-//                                                           Text(
-//                                                             '$linkCount links',
-//                                                             style: const TextStyle(
-//                                                               fontSize: 14,
-//                                                               color: Colors.white60,
-//                                                               fontWeight: FontWeight.w600,
-//                                                             ),
-//                                                           ),
-//                                                         ],
-//                                                       ),
-//                                                     ],
-//                                                   ),
-//                                           ),
-//                                         ),
-
-//                                         // Search Icon Button
-//                                         GestureDetector(
-//                                           onTap: () {
-//                                             setState(() {
-//                                               _isSearchActive = !_isSearchActive;
-//                                               if (!_isSearchActive) {
-//                                                 _searchController.clear();
-//                                                 _searchQuery = '';
-//                                               }
-//                                             });
-//                                           },
-//                                           child: Container(
-//                                             padding: EdgeInsets.all(10),
-//                                             decoration: BoxDecoration(
-//                                               color: _isSearchActive
-//                                                   ? Color(0xFF667eea).withOpacity(0.3)
-//                                                   : Colors.white.withOpacity(0.1),
-//                                               border: Border.all(
-//                                                 color: _isSearchActive
-//                                                     ? Color(0xFF667eea).withOpacity(0.5)
-//                                                     : Colors.white.withOpacity(0.12),
-//                                                 width: 1,
-//                                               ),
-//                                               borderRadius: BorderRadius.circular(8),
-//                                             ),
-//                                             child: Icon(
-//                                               _isSearchActive ? Icons.close : Icons.search_rounded,
-//                                               color: Colors.white54,
-//                                               size: 18,
-//                                             ),
-//                                           ),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                             );
-//                           },
-//                         ),
-
-//                         SizedBox(height: 16),
-
-//                         // Enhanced Links List with Search Filter
-//                         StreamBuilder(
-//                           stream: _linksStream,
-//                           builder: (context, snapshot) {
-//                             if (snapshot.hasError) {
-//                               return Column(
-//                                 mainAxisAlignment: MainAxisAlignment.center,
-//                                 children: [
-
-//                                    SizedBox(
-//                                     height: MediaQuery.sizeOf(context).height * 0.14,
-//                                   ),
-//                                   Text(
-//                                     'Oops!\nSomething went wrong.\nPlease Try Again',
-//                                     style: TextStyle(color: Colors.white70),
-//                                   ),
-//                                 ],
-//                               );
-//                             }
-
-//                             if (snapshot.connectionState == ConnectionState.waiting) {
-//                               return Column(
-//                                 mainAxisAlignment: MainAxisAlignment.center,
-//                                 children: [
-//                                   SizedBox(
-//                                     height: MediaQuery.sizeOf(context).height * 0.14,
-//                                   ),
-//                                   CircularProgressIndicator(
-//                                     color: Color(0xFF667eea),
-//                                   ),
-//                                 ],
-//                               );
-//                             }
-
-//                             final data = snapshot.data!.snapshot.value as Map<dynamic, dynamic>?;
-
-//                             if (data == null) {
-//                               return _noDataHandler();
-//                             }
-
-//                             final items = data.entries.toList();
-
-//                             // Sort by timestamp (most recent first)
-//                             items.sort((a, b) {
-//                               final aTime = a.value["timestamp"] ?? "";
-//                               final bTime = b.value["timestamp"] ?? "";
-//                               return bTime.compareTo(aTime);
-//                             });
-
-//                             // Filter links based on search query (searches ALL links)
-//                             final filteredItems = _filterLinks(items);
-
-//                             // If searching, show all filtered results
-//                             // If not searching, show only 4 most recent
-//                             final displayItems =
-//                                 _searchQuery.isNotEmpty ? filteredItems : items.take(4).toList();
-
-//                             // Show "no results" message if search is active but no matches
-//                             if (_searchQuery.isNotEmpty && filteredItems.isEmpty) {
-//                               return _noSearchFounds(context);
-//                             }
-
-//                             return Expanded(
-//                               child: ListView.builder(
-//                                 shrinkWrap: true,
-//                                 physics: AlwaysScrollableScrollPhysics(),
-//                                 itemCount: displayItems.length,
-//                                 itemBuilder: (context, index) {
-//                                   final link = displayItems[index].value["url"];
-//                                   final key = displayItems[index].key;
-
-//                                   return Padding(
-//                                     padding: const EdgeInsets.symmetric(horizontal: 16),
-//                                     child: Container(
-//                                       margin: EdgeInsets.symmetric(vertical: 6),
-//                                       decoration: BoxDecoration(
-//                                         color: Colors.white.withOpacity(0.08),
-//                                         borderRadius: BorderRadius.circular(16),
-//                                         border: Border.all(
-//                                           color: Colors.white.withOpacity(0.1),
-//                                         ),
-//                                       ),
-//                                       child: Material(
-//                                         color: Colors.transparent,
-//                                         child: InkWell(
-//                                           borderRadius: BorderRadius.circular(16),
-//                                           onTap: () {
-//                                             // Add your tap logic here
-//                                           },
-//                                           child: Padding(
-//                                             padding: EdgeInsets.all(16),
-//                                             child: Row(
-//                                               children: [
-//                                                 // Icon Container
-//                                                 Container(
-//                                                   width: 48,
-//                                                   height: 48,
-//                                                   decoration: BoxDecoration(
-//                                                     gradient: LinearGradient(
-//                                                       begin: Alignment.topLeft,
-//                                                       colors: [
-//                                                         Colors.blueAccent,
-//                                                         Colors.deepPurpleAccent
-//                                                       ],
-//                                                     ),
-//                                                     borderRadius: BorderRadius.circular(12),
-//                                                   ),
-//                                                   child: Icon(
-//                                                     Icons.link,
-//                                                     color: Colors.white,
-//                                                     size: 24,
-//                                                   ),
-//                                                 ),
-//                                                 SizedBox(width: 14),
-//                                                 // Link Text
-//                                                 Expanded(
-//                                                   child: Column(
-//                                                     crossAxisAlignment: CrossAxisAlignment.start,
-//                                                     children: [
-//                                                       Text(
-//                                                         _extractDomain(link ?? ""),
-//                                                         style: TextStyle(
-//                                                           color: Colors.white,
-//                                                           fontSize: 15,
-//                                                           fontWeight: FontWeight.w600,
-//                                                         ),
-//                                                       ),
-//                                                       SizedBox(height: 4),
-//                                                       Text(
-//                                                         link ?? "",
-//                                                         style: TextStyle(
-//                                                           color: Colors.white.withOpacity(0.5),
-//                                                           fontSize: 13,
-//                                                         ),
-//                                                         maxLines: 1,
-//                                                         overflow: TextOverflow.ellipsis,
-//                                                       ),
-//                                                     ],
-//                                                   ),
-//                                                 ),
-//                                                 // Action Button
-//                                                 Container(
-//                                                   padding: EdgeInsets.all(8),
-//                                                   decoration: BoxDecoration(
-//                                                     color: Colors.white.withOpacity(0.1),
-//                                                     borderRadius: BorderRadius.circular(8),
-//                                                   ),
-//                                                   child: Icon(
-//                                                     Icons.open_in_new,
-//                                                     color: Colors.white.withOpacity(0.7),
-//                                                     size: 18,
-//                                                   ),
-//                                                 ),
-//                                                 SizedBox(width: 8),
-//                                                 GestureDetector(
-//                                                   onTap: () async {
-//                                                     try {
-//                                                       await _dbRef.child(key).remove().timeout(
-//                                                             Duration(seconds: 5),
-//                                                           );
-//                                                     } catch (e) {
-//                                                       print('Error deleting link: $e');
-//                                                     }
-//                                                   },
-//                                                   child: Container(
-//                                                     padding: EdgeInsets.all(8),
-//                                                     decoration: BoxDecoration(
-//                                                       color: Colors.redAccent.withOpacity(0.26),
-//                                                       borderRadius: BorderRadius.circular(8),
-//                                                     ),
-//                                                     child: Icon(
-//                                                       Icons.delete_outline_rounded,
-//                                                       color: Colors.red,
-//                                                       size: 18,
-//                                                     ),
-//                                                   ),
-//                                                 ),
-//                                               ],
-//                                             ),
-//                                           ),
-//                                         ),
-//                                       ),
-//                                     ),
-//                                   );
-//                                 },
-//                               ),
-//                             );
-//                           },
-//                         ),
-//                       ],
-//                     ),
-//                   )
-//                 : Center(
-//                     child: Column(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: [
-//                         Text(
-//                           'Loading...',
-//                           style: TextStyle(
-//                             fontSize: 16,
-//                             color: Colors.white70,
-//                           ),
-//                         ),
-//                         SizedBox(
-//                           height: 40,
-//                         ),
-//                         CircularProgressIndicator(
-//                           color: Color(0xFF667eea),
-//                         )
-//                       ],
-//                     ),
-//                   ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   Expanded _noSearchFounds(BuildContext context) {
-//     return Expanded(
-//                               child: Center(
-//                                 child: Column(
-//                                   mainAxisAlignment: MainAxisAlignment.center,
-//                                   children: [
-//                                      SizedBox(
-//                                   height: MediaQuery.sizeOf(context).height * 0.14,
-//                                 ),
-//                                     Icon(
-//                                       Icons.search_off,
-//                                       color: Colors.white38,
-//                                       size: 64,
-//                                     ),
-//                                     SizedBox(height: 16),
-//                                     Text(
-//                                       'No results found',
-//                                       style: TextStyle(
-//                                         color: Colors.white70,
-//                                         fontSize: 16,
-//                                         fontWeight: FontWeight.w600,
-//                                       ),
-//                                     ),
-//                                     SizedBox(height: 8),
-//                                     Text(
-//                                       'Try searching with different keywords',
-//                                       style: TextStyle(
-//                                         color: Colors.white38,
-//                                         fontSize: 13,
-//                                       ),
-//                                     ),
-//                                   ],
-//                                 ),
-//                               ),
-//                             );
-//   }
-// }
-
-// Container _noDataHandler() {
-//   return Container(
-//     padding: EdgeInsets.symmetric(vertical: 60),
-//     child: Column(
-//       children: [
-//         Container(
-//           padding: EdgeInsets.all(24),
-//           decoration: BoxDecoration(
-//             shape: BoxShape.circle,
-//             color: Colors.white.withOpacity(0.05),
-//           ),
-//           child: SvgPicture.asset(
-//             R.ASSETS_ICONS_EMPTY_NEST_SVG,
-//             color: Colors.white.withOpacity(0.3),
-//             height: 60,
-//           ),
-//         ),
-//         24.heightBox,
-//         Text(
-//           'Oops!',
-//           style: TextStyle(
-//             fontSize: 18,
-//             color: Colors.white.withOpacity(0.8),
-//             fontWeight: FontWeight.w600,
-//           ),
-//         ),
-//         8.heightBox,
-//         Text(
-//           'Your nest is empty',
-//           style: TextStyle(
-//             fontSize: 16,
-//             color: Colors.white.withOpacity(0.6),
-//             fontWeight: FontWeight.w500,
-//           ),
-//         ),
-//         8.heightBox,
-//         Padding(
-//           padding: EdgeInsets.symmetric(horizontal: 40),
-//           child: Text(
-//             'Start saving your favorite links to see them here.',
-//             textAlign: TextAlign.center,
-//             style: TextStyle(
-//               fontSize: 14,
-//               color: Colors.white.withOpacity(0.5),
-//               fontWeight: FontWeight.w400,
-//               height: 1.5,
-//             ),
-//           ),
-//         ),
-//       ],
-//     ),
-//   );
-// }
-
-// // Helper method to extract domain from URL
-// String _extractDomain(String url) {
-//   try {
-//     Uri uri = Uri.parse(url);
-//     String domain = uri.host;
-//     if (domain.startsWith('www.')) {
-//       domain = domain.substring(4);
-//     }
-//     // Capitalize first letter
-//     return domain.split('.')[0].substring(0, 1).toUpperCase() + domain.split('.')[0].substring(1);
-//   } catch (e) {
-//     return 'Link';
-//   }
-// }
-
 class _HomePageState extends ConsumerState<HomePage> {
   // Updated to use new database structure
   String? _userId;
@@ -927,6 +38,23 @@ class _HomePageState extends ConsumerState<HomePage> {
   Timer? _debounceTimer;
   String _searchQuery = '';
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _userId = FirebaseAuth.instance.currentUser?.uid;
+
+  //   if (_userId != null) {
+  //     _dbRef = FirebaseDatabase.instance.ref("users/$_userId/links");
+  //     _collectionsRef = FirebaseDatabase.instance.ref("users/$_userId/collections");
+  //     // Create a single broadcast stream that can be listened to multiple times
+  //     _linksStream = _dbRef.onValue.asBroadcastStream();
+  //     _collectionsStream = _collectionsRef.onValue.asBroadcastStream();
+  //   }
+
+  //   // Add search listener
+  //   _searchController.addListener(_onSearchChanged);
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -935,111 +63,20 @@ class _HomePageState extends ConsumerState<HomePage> {
     if (_userId != null) {
       _dbRef = FirebaseDatabase.instance.ref("users/$_userId/links");
       _collectionsRef = FirebaseDatabase.instance.ref("users/$_userId/collections");
-      // Create a single broadcast stream that can be listened to multiple times
+
       _linksStream = _dbRef.onValue.asBroadcastStream();
       _collectionsStream = _collectionsRef.onValue.asBroadcastStream();
     }
 
-    // Add search listener
     _searchController.addListener(_onSearchChanged);
   }
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _debounceTimer?.cancel();
-    _controller.dispose();
-    super.dispose();
-  }
-
-  bool isLoading = false;
-  void _logout() async {
-    try {
-      setState(() {
-        isLoading = true;
-      });
-      final repo = ref.read(authRepositoryProvider);
-      await repo.signOut();
-      talker.debug('LOGGING OUT');
-
-      if (mounted) {
-        await Future.delayed(const Duration(seconds: 2));
-        context.router.replaceAll([SigninRoute()]);
-      }
-      setState(() {
-        isLoading = false;
-      });
-    } catch (e) {
-      talker.debug('DEBUG CATCH :::::: $e');
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  // Debounced search handler
-  void _onSearchChanged() {
-    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
-
-    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        setState(() {
-          _searchQuery = _searchController.text.toLowerCase().trim();
-
-          // Close search bar if query is empty
-          if (_searchQuery.isEmpty) {
-            _isSearchActive = false;
-          }
-        });
-      }
-    });
-  }
-
-  // Updated filter to include collection and tags
-  List<MapEntry<dynamic, dynamic>> _filterLinks(List<MapEntry<dynamic, dynamic>> items) {
-    if (_searchQuery.isEmpty) {
-      return items;
-    }
-
-    return items.where((item) {
-      final url = (item.value["url"] ?? "").toString().toLowerCase();
-      final domain = _extractDomain(item.value["url"] ?? "").toLowerCase();
-      final timestamp = item.value["timestamp"] ?? "";
-      final collection = (item.value["collection"] ?? "").toString().toLowerCase();
-
-      // Get tags as string
-      String tagsStr = "";
-      if (item.value["tags"] != null && item.value["tags"] is List) {
-        List<dynamic> tags = item.value["tags"];
-        tagsStr = tags.join(" ").toLowerCase();
-      }
-
-      // Format date for searching
-      String dateStr = "";
-      try {
-        if (timestamp.isNotEmpty) {
-          final date = DateTime.parse(timestamp);
-          dateStr = "${date.day}/${date.month}/${date.year}".toLowerCase();
-        }
-      } catch (e) {
-        // If date parsing fails, continue without date search
-      }
-
-      // Search in domain, url, date, collection, and tags
-      return domain.contains(_searchQuery) ||
-          url.contains(_searchQuery) ||
-          dateStr.contains(_searchQuery) ||
-          collection.contains(_searchQuery) ||
-          tagsStr.contains(_searchQuery);
-    }).toList();
-  }
-
-  // Show organize bottom sheet after saving link
+// Replace the existing _showOrganizeSheet method with this enhanced version
   void _showOrganizeSheet(String linkId, String url) {
     String? selectedCollection;
     List<String> selectedTags = [];
     final TextEditingController tagController = TextEditingController();
+    bool showCreateTagInput = false; // NEW: Toggle between tag list and input
 
     showModalBottomSheet(
       context: context,
@@ -1179,21 +216,48 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                     SizedBox(height: 20),
 
-                    // Tags Input
-                    Text(
-                      'Tags',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white70,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    // Tags Section Header with Create Button
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Tags',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white70,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        // NEW: Create Tag Button
+                        if (!showCreateTagInput)
+                          TextButton.icon(
+                            onPressed: () {
+                              setModalState(() {
+                                showCreateTagInput = true;
+                              });
+                            },
+                            icon: Icon(Icons.add, size: 16, color: Color(0xFF667eea)),
+                            label: Text(
+                              'Create New',
+                              style: TextStyle(
+                                color: Color(0xFF667eea),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              minimumSize: Size(0, 0),
+                            ),
+                          ),
+                      ],
                     ),
                     SizedBox(height: 8),
 
                     // Display selected tags
                     if (selectedTags.isNotEmpty)
                       Container(
-                        margin: EdgeInsets.only(bottom: 8),
+                        margin: EdgeInsets.only(bottom: 12),
                         child: Wrap(
                           spacing: 8,
                           runSpacing: 8,
@@ -1237,38 +301,275 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                       ),
 
-                    // Tag input field
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.1),
-                        ),
-                      ),
-                      child: TextField(
-                        controller: tagController,
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                        decoration: InputDecoration(
-                          hintText: 'Add tags (press enter)',
-                          hintStyle: TextStyle(color: Colors.white38),
-                          prefixIcon: Icon(Icons.label, color: Colors.white.withOpacity(0.5)),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 14,
+                    // NEW: Conditional rendering - Show either tag list or create input
+                    if (showCreateTagInput)
+                      // Create New Tag Input
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.08),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.1),
+                              ),
+                            ),
+                            child: TextField(
+                              controller: tagController,
+                              autofocus: true,
+                              style: TextStyle(color: Colors.white, fontSize: 15),
+                              decoration: InputDecoration(
+                                hintText: 'Enter tag name',
+                                hintStyle: TextStyle(color: Colors.white38),
+                                prefixIcon: Icon(Icons.label, color: Colors.white.withOpacity(0.5)),
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 14,
+                                ),
+                              ),
+                              onSubmitted: (value) {
+                                if (value.trim().isNotEmpty &&
+                                    !selectedTags.contains(value.trim())) {
+                                  setModalState(() {
+                                    selectedTags.add(value.trim());
+                                    tagController.clear();
+                                    showCreateTagInput = false;
+                                  });
+                                }
+                              },
+                            ),
                           ),
-                        ),
-                        onSubmitted: (value) {
-                          if (value.trim().isNotEmpty && !selectedTags.contains(value.trim())) {
-                            setModalState(() {
-                              selectedTags.add(value.trim());
-                              tagController.clear();
+                          SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  setModalState(() {
+                                    showCreateTagInput = false;
+                                    tagController.clear();
+                                  });
+                                },
+                                child: Text(
+                                  'Cancel',
+                                  style: TextStyle(color: Colors.white54),
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              ElevatedButton(
+                                onPressed: () {
+                                  if (tagController.text.trim().isNotEmpty &&
+                                      !selectedTags.contains(tagController.text.trim())) {
+                                    setModalState(() {
+                                      selectedTags.add(tagController.text.trim());
+                                      tagController.clear();
+                                      showCreateTagInput = false;
+                                    });
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(0xFF667eea),
+                                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Add',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    else
+                      // NEW: Show Previously Created Tags from all links
+                      FutureBuilder(
+                        future: _dbRef.once(),
+                        builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+                          // While loading, show a loading indicator
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Container(
+                              padding: EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.05),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.1),
+                                ),
+                              ),
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: Color(0xFF667eea),
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            );
+                          }
+
+                          final allUserTags = <String>{};
+
+                          // Extract ALL unique tags from all links
+                          if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
+                            final linksData =
+                                snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+
+                            linksData.forEach((linkKey, linkValue) {
+                              if (linkValue is Map && linkValue['tags'] != null) {
+                                final tags = linkValue['tags'];
+                                if (tags is List) {
+                                  for (var tag in tags) {
+                                    if (tag != null && tag.toString().trim().isNotEmpty) {
+                                      allUserTags.add(tag.toString().trim());
+                                    }
+                                  }
+                                }
+                              }
                             });
                           }
+
+                          // Filter out already selected tags
+                          final availableTags =
+                              allUserTags.where((tag) => !selectedTags.contains(tag)).toList();
+
+                          // If no tags exist at all in any links
+                          if (allUserTags.isEmpty) {
+                            return Container(
+                              padding: EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.05),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.1),
+                                ),
+                              ),
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.label_off_outlined,
+                                      color: Colors.white38,
+                                      size: 32,
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      'No tags yet. Create your first tag!',
+                                      style: TextStyle(
+                                        color: Colors.white38,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+
+                          // If all tags are selected
+                          if (availableTags.isEmpty) {
+                            return Container(
+                              padding: EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.05),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.1),
+                                ),
+                              ),
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.check_circle_outline,
+                                      color: Color(0xFF667eea),
+                                      size: 32,
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      'All tags selected',
+                                      style: TextStyle(
+                                        color: Colors.white38,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+
+                          // Show available tags as choice chips
+                          return Container(
+                            constraints: BoxConstraints(maxHeight: 200),
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              // color: Colors.white.withOpacity(0.05),
+                              borderRadius: BorderRadius.circular(12),
+                              // border: Border.all(
+                              //   color: Colors.white.withOpacity(0.1),
+                              // ),
+                            ),
+                            child: SingleChildScrollView(
+                              child: Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: availableTags.map((tag) {
+                                  return InkWell(
+                                    onTap: () {
+                                      setModalState(() {
+                                        if (!selectedTags.contains(tag)) {
+                                          selectedTags.add(tag);
+                                        }
+                                      });
+                                    },
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.08),
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: Color(0xFF667eea).withOpacity(0.3),
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.label,
+                                            color: Color(0xFF667eea),
+                                            size: 16,
+                                          ),
+                                          SizedBox(width: 6),
+                                          Text(
+                                            tag,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          SizedBox(width: 6),
+                                          Icon(
+                                            Icons.add_circle,
+                                            color: Color(0xFF667eea),
+                                            size: 16,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          );
                         },
                       ),
-                    ),
+
                     SizedBox(height: 24),
 
                     // Action Buttons
@@ -1319,12 +620,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(12),
                                 onTap: () async {
+                                  // Close the modal immediately
+                                  Navigator.pop(context);
+
                                   try {
+                                    // Save in background
                                     await _dbRef.child(linkId).update({
                                       'collection': selectedCollection ?? '',
                                       'tags': selectedTags,
                                     });
-                                    Navigator.pop(context);
+
                                     if (mounted) {
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
@@ -1339,6 +644,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     }
                                   } catch (e) {
                                     print('Error organizing link: $e');
+                                    if (mounted) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text('Failed to organize link'),
+                                          behavior: SnackBarBehavior.floating,
+                                          backgroundColor: Colors.red.shade400,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                      );
+                                    }
                                   }
                                 },
                                 child: Center(
@@ -1366,6 +683,992 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _debounceTimer?.cancel();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  bool isLoading = false;
+  void _logout() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      final repo = ref.read(authRepositoryProvider);
+      await repo.signOut();
+      talker.debug('LOGGING OUT');
+
+      if (mounted) {
+        await Future.delayed(const Duration(seconds: 2));
+        context.router.replaceAll([SigninRoute()]);
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      talker.debug('DEBUG CATCH :::::: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  // Debounced search handler
+  void _onSearchChanged() {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        setState(() {
+          _searchQuery = _searchController.text.toLowerCase().trim();
+
+          // Close search bar if query is empty
+          if (_searchQuery.isEmpty) {
+            _isSearchActive = false;
+          }
+        });
+      }
+    });
+  }
+
+  // Updated filter to include collection and tags
+  List<MapEntry<dynamic, dynamic>> _filterLinks(List<MapEntry<dynamic, dynamic>> items) {
+    if (_searchQuery.isEmpty) {
+      return items;
+    }
+
+    return items.where((item) {
+      final url = (item.value["url"] ?? "").toString().toLowerCase();
+      final domain = _extractDomain(item.value["url"] ?? "").toLowerCase();
+      final timestamp = item.value["timestamp"] ?? "";
+      final collection = (item.value["collection"] ?? "").toString().toLowerCase();
+
+      // Get tags as string
+      String tagsStr = "";
+      if (item.value["tags"] != null && item.value["tags"] is List) {
+        List<dynamic> tags = item.value["tags"];
+        tagsStr = tags.join(" ").toLowerCase();
+      }
+
+      // Format date for searching
+      String dateStr = "";
+      try {
+        if (timestamp.isNotEmpty) {
+          final date = DateTime.parse(timestamp);
+          dateStr = "${date.day}/${date.month}/${date.year}".toLowerCase();
+        }
+      } catch (e) {
+        // If date parsing fails, continue without date search
+      }
+
+      // Search in domain, url, date, collection, and tags
+      return domain.contains(_searchQuery) ||
+          url.contains(_searchQuery) ||
+          dateStr.contains(_searchQuery) ||
+          collection.contains(_searchQuery) ||
+          tagsStr.contains(_searchQuery);
+    }).toList();
+  }
+
+  // // Show organize bottom sheet after saving link
+  // void _showOrganizeSheet(String linkId, String url) {
+  //   String? selectedCollection;
+  //   List<String> selectedTags = [];
+  //   final TextEditingController tagController = TextEditingController();
+
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     backgroundColor: Colors.transparent,
+  //     builder: (context) => StatefulBuilder(
+  //       builder: (context, setModalState) => Padding(
+  //         padding: EdgeInsets.only(
+  //           bottom: MediaQuery.of(context).viewInsets.bottom,
+  //         ),
+  //         child: Container(
+  //           decoration: BoxDecoration(
+  //             gradient: LinearGradient(
+  //               begin: Alignment.topLeft,
+  //               end: Alignment.bottomRight,
+  //               colors: [
+  //                 Color(0xFF1a1a2e),
+  //                 Color(0xFF16213e),
+  //               ],
+  //             ),
+  //             borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+  //             border: Border.all(
+  //               color: Colors.white.withOpacity(0.1),
+  //               width: 1,
+  //             ),
+  //           ),
+  //           child: SafeArea(
+  //             child: Padding(
+  //               padding: EdgeInsets.all(24),
+  //               child: Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   // Header
+  //                   Row(
+  //                     children: [
+  //                       Icon(Icons.celebration, color: Color(0xFF667eea), size: 24),
+  //                       SizedBox(width: 12),
+  //                       Expanded(
+  //                         child: Column(
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           children: [
+  //                             Text(
+  //                               'Link Saved! 🎉',
+  //                               style: TextStyle(
+  //                                 fontSize: 20,
+  //                                 fontWeight: FontWeight.w600,
+  //                                 color: Colors.white,
+  //                               ),
+  //                             ),
+  //                             Text(
+  //                               'Organize it now',
+  //                               style: TextStyle(
+  //                                 fontSize: 14,
+  //                                 color: Colors.white60,
+  //                               ),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       IconButton(
+  //                         onPressed: () => Navigator.pop(context),
+  //                         icon: Icon(Icons.close, color: Colors.white54),
+  //                         padding: EdgeInsets.zero,
+  //                         constraints: BoxConstraints(),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                   SizedBox(height: 24),
+
+  //                   // Collection Dropdown
+  //                   Text(
+  //                     'Collection',
+  //                     style: TextStyle(
+  //                       fontSize: 14,
+  //                       color: Colors.white70,
+  //                       fontWeight: FontWeight.w500,
+  //                     ),
+  //                   ),
+  //                   SizedBox(height: 8),
+  //                   StreamBuilder(
+  //                     stream: _collectionsStream,
+  //                     builder: (context, snapshot) {
+  //                       List<Map<String, dynamic>> collections = [];
+
+  //                       if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
+  //                         final data = snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+  //                         collections = data.entries
+  //                             .map((e) => {
+  //                                   'id': e.key,
+  //                                   'name': e.value['name'] ?? 'Untitled',
+  //                                 })
+  //                             .toList();
+  //                       }
+
+  //                       return Container(
+  //                         padding: EdgeInsets.symmetric(horizontal: 16),
+  //                         decoration: BoxDecoration(
+  //                           color: Colors.white.withOpacity(0.08),
+  //                           borderRadius: BorderRadius.circular(12),
+  //                           border: Border.all(
+  //                             color: Colors.white.withOpacity(0.1),
+  //                           ),
+  //                         ),
+  //                         child: DropdownButtonHideUnderline(
+  //                           child: DropdownButton<String>(
+  //                             value: selectedCollection,
+  //                             isExpanded: true,
+  //                             hint: Text(
+  //                               'Select a collection',
+  //                               style: TextStyle(color: Colors.white38),
+  //                             ),
+  //                             dropdownColor: Color(0xFF1a1a2e),
+  //                             style: TextStyle(color: Colors.white),
+  //                             icon: Icon(Icons.arrow_drop_down, color: Colors.white54),
+  //                             items: [
+  //                               DropdownMenuItem(
+  //                                 value: null,
+  //                                 child: Text('Uncategorized'),
+  //                               ),
+  //                               ...collections.map((collection) {
+  //                                 return DropdownMenuItem<String>(
+  //                                   value: collection['name'],
+  //                                   child: Text(collection['name']),
+  //                                 );
+  //                               }),
+  //                             ],
+  //                             onChanged: (value) {
+  //                               setModalState(() {
+  //                                 selectedCollection = value;
+  //                               });
+  //                             },
+  //                           ),
+  //                         ),
+  //                       );
+  //                     },
+  //                   ),
+  //                   SizedBox(height: 20),
+
+  //                   // Tags Input
+  //                   Text(
+  //                     'Tags',
+  //                     style: TextStyle(
+  //                       fontSize: 14,
+  //                       color: Colors.white70,
+  //                       fontWeight: FontWeight.w500,
+  //                     ),
+  //                   ),
+  //                   SizedBox(height: 8),
+
+  //                   // Display selected tags
+  //                   if (selectedTags.isNotEmpty)
+  //                     Container(
+  //                       margin: EdgeInsets.only(bottom: 8),
+  //                       child: Wrap(
+  //                         spacing: 8,
+  //                         runSpacing: 8,
+  //                         children: selectedTags.map((tag) {
+  //                           return Container(
+  //                             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+  //                             decoration: BoxDecoration(
+  //                               color: Color(0xFF667eea).withOpacity(0.2),
+  //                               borderRadius: BorderRadius.circular(8),
+  //                               border: Border.all(
+  //                                 color: Color(0xFF667eea).withOpacity(0.4),
+  //                               ),
+  //                             ),
+  //                             child: Row(
+  //                               mainAxisSize: MainAxisSize.min,
+  //                               children: [
+  //                                 Text(
+  //                                   '#$tag',
+  //                                   style: TextStyle(
+  //                                     color: Colors.white,
+  //                                     fontSize: 13,
+  //                                   ),
+  //                                 ),
+  //                                 SizedBox(width: 6),
+  //                                 GestureDetector(
+  //                                   onTap: () {
+  //                                     setModalState(() {
+  //                                       selectedTags.remove(tag);
+  //                                     });
+  //                                   },
+  //                                   child: Icon(
+  //                                     Icons.close,
+  //                                     size: 16,
+  //                                     color: Colors.white70,
+  //                                   ),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           );
+  //                         }).toList(),
+  //                       ),
+  //                     ),
+
+  //                   // Tag input field
+  //                   Container(
+  //                     decoration: BoxDecoration(
+  //                       color: Colors.white.withOpacity(0.08),
+  //                       borderRadius: BorderRadius.circular(12),
+  //                       border: Border.all(
+  //                         color: Colors.white.withOpacity(0.1),
+  //                       ),
+  //                     ),
+  //                     child: TextField(
+  //                       controller: tagController,
+  //                       style: TextStyle(color: Colors.white, fontSize: 15),
+  //                       decoration: InputDecoration(
+  //                         hintText: 'Add tags (press enter)',
+  //                         hintStyle: TextStyle(color: Colors.white38),
+  //                         prefixIcon: Icon(Icons.label, color: Colors.white.withOpacity(0.5)),
+  //                         border: InputBorder.none,
+  //                         contentPadding: EdgeInsets.symmetric(
+  //                           horizontal: 16,
+  //                           vertical: 14,
+  //                         ),
+  //                       ),
+  //                       onSubmitted: (value) {
+  //                         if (value.trim().isNotEmpty && !selectedTags.contains(value.trim())) {
+  //                           setModalState(() {
+  //                             selectedTags.add(value.trim());
+  //                             tagController.clear();
+  //                           });
+  //                         }
+  //                       },
+  //                     ),
+  //                   ),
+  //                   SizedBox(height: 24),
+
+  //                   // Action Buttons
+  //                   Row(
+  //                     children: [
+  //                       Expanded(
+  //                         child: TextButton(
+  //                           onPressed: () => Navigator.pop(context),
+  //                           style: TextButton.styleFrom(
+  //                             padding: EdgeInsets.symmetric(vertical: 16),
+  //                             shape: RoundedRectangleBorder(
+  //                               borderRadius: BorderRadius.circular(12),
+  //                               side: BorderSide(
+  //                                 color: Colors.white.withOpacity(0.2),
+  //                               ),
+  //                             ),
+  //                           ),
+  //                           child: Text(
+  //                             'Skip',
+  //                             style: TextStyle(
+  //                               color: Colors.white70,
+  //                               fontSize: 16,
+  //                               fontWeight: FontWeight.w600,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       SizedBox(width: 12),
+  //                       Expanded(
+  //                         flex: 2,
+  //                         child: Container(
+  //                           height: 52,
+  //                           decoration: BoxDecoration(
+  //                             gradient: LinearGradient(
+  //                               colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+  //                             ),
+  //                             borderRadius: BorderRadius.circular(12),
+  //                             boxShadow: [
+  //                               BoxShadow(
+  //                                 color: Color(0xFF667eea).withOpacity(0.4),
+  //                                 blurRadius: 20,
+  //                                 offset: Offset(0, 8),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                           child: Material(
+  //                             color: Colors.transparent,
+  //                             child: InkWell(
+  //                               borderRadius: BorderRadius.circular(12),
+  //                               onTap: () async {
+  //                                 try {
+  //                                   await _dbRef.child(linkId).update({
+  //                                     'collection': selectedCollection ?? '',
+  //                                     'tags': selectedTags,
+  //                                   });
+  //                                   Navigator.pop(context);
+  //                                   if (mounted) {
+  //                                     ScaffoldMessenger.of(context).showSnackBar(
+  //                                       SnackBar(
+  //                                         content: Text('Link organized successfully!'),
+  //                                         behavior: SnackBarBehavior.floating,
+  //                                         backgroundColor: Colors.green.shade400,
+  //                                         shape: RoundedRectangleBorder(
+  //                                           borderRadius: BorderRadius.circular(10),
+  //                                         ),
+  //                                       ),
+  //                                     );
+  //                                   }
+  //                                 } catch (e) {
+  //                                   print('Error organizing link: $e');
+  //                                 }
+  //                               },
+  //                               child: Center(
+  //                                 child: Text(
+  //                                   'Save',
+  //                                   style: TextStyle(
+  //                                     fontSize: 16,
+  //                                     fontWeight: FontWeight.w600,
+  //                                     color: Colors.white,
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // void _showOrganizeSheet(String linkId, String url) {
+  //   String? selectedCollection;
+  //   List<String> selectedTags = [];
+  //   final TextEditingController tagController = TextEditingController();
+  //   bool showCreateTagInput = false; // NEW: Toggle between tag list and input
+
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     backgroundColor: Colors.transparent,
+  //     builder: (context) => StatefulBuilder(
+  //       builder: (context, setModalState) => Padding(
+  //         padding: EdgeInsets.only(
+  //           bottom: MediaQuery.of(context).viewInsets.bottom,
+  //         ),
+  //         child: Container(
+  //           decoration: BoxDecoration(
+  //             gradient: LinearGradient(
+  //               begin: Alignment.topLeft,
+  //               end: Alignment.bottomRight,
+  //               colors: [
+  //                 Color(0xFF1a1a2e),
+  //                 Color(0xFF16213e),
+  //               ],
+  //             ),
+  //             borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+  //             border: Border.all(
+  //               color: Colors.white.withOpacity(0.1),
+  //               width: 1,
+  //             ),
+  //           ),
+  //           child: SafeArea(
+  //             child: Padding(
+  //               padding: EdgeInsets.all(24),
+  //               child: Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   // Header
+  //                   Row(
+  //                     children: [
+  //                       Icon(Icons.celebration, color: Color(0xFF667eea), size: 24),
+  //                       SizedBox(width: 12),
+  //                       Expanded(
+  //                         child: Column(
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           children: [
+  //                             Text(
+  //                               'Link Saved! 🎉',
+  //                               style: TextStyle(
+  //                                 fontSize: 20,
+  //                                 fontWeight: FontWeight.w600,
+  //                                 color: Colors.white,
+  //                               ),
+  //                             ),
+  //                             Text(
+  //                               'Organize it now',
+  //                               style: TextStyle(
+  //                                 fontSize: 14,
+  //                                 color: Colors.white60,
+  //                               ),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       IconButton(
+  //                         onPressed: () => Navigator.pop(context),
+  //                         icon: Icon(Icons.close, color: Colors.white54),
+  //                         padding: EdgeInsets.zero,
+  //                         constraints: BoxConstraints(),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                   SizedBox(height: 24),
+
+  //                   // Collection Dropdown
+  //                   Text(
+  //                     'Collection',
+  //                     style: TextStyle(
+  //                       fontSize: 14,
+  //                       color: Colors.white70,
+  //                       fontWeight: FontWeight.w500,
+  //                     ),
+  //                   ),
+  //                   SizedBox(height: 8),
+  //                   StreamBuilder(
+  //                     stream: _collectionsStream,
+  //                     builder: (context, snapshot) {
+  //                       List<Map<String, dynamic>> collections = [];
+
+  //                       if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
+  //                         final data = snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+  //                         collections = data.entries
+  //                             .map((e) => {
+  //                                   'id': e.key,
+  //                                   'name': e.value['name'] ?? 'Untitled',
+  //                                 })
+  //                             .toList();
+  //                       }
+
+  //                       return Container(
+  //                         padding: EdgeInsets.symmetric(horizontal: 16),
+  //                         decoration: BoxDecoration(
+  //                           color: Colors.white.withOpacity(0.08),
+  //                           borderRadius: BorderRadius.circular(12),
+  //                           border: Border.all(
+  //                             color: Colors.white.withOpacity(0.1),
+  //                           ),
+  //                         ),
+  //                         child: DropdownButtonHideUnderline(
+  //                           child: DropdownButton<String>(
+  //                             value: selectedCollection,
+  //                             isExpanded: true,
+  //                             hint: Text(
+  //                               'Select a collection',
+  //                               style: TextStyle(color: Colors.white38),
+  //                             ),
+  //                             dropdownColor: Color(0xFF1a1a2e),
+  //                             style: TextStyle(color: Colors.white),
+  //                             icon: Icon(Icons.arrow_drop_down, color: Colors.white54),
+  //                             items: [
+  //                               DropdownMenuItem(
+  //                                 value: null,
+  //                                 child: Text('Uncategorized'),
+  //                               ),
+  //                               ...collections.map((collection) {
+  //                                 return DropdownMenuItem<String>(
+  //                                   value: collection['name'],
+  //                                   child: Text(collection['name']),
+  //                                 );
+  //                               }),
+  //                             ],
+  //                             onChanged: (value) {
+  //                               setModalState(() {
+  //                                 selectedCollection = value;
+  //                               });
+  //                             },
+  //                           ),
+  //                         ),
+  //                       );
+  //                     },
+  //                   ),
+  //                   SizedBox(height: 20),
+
+  //                   // Tags Section Header with Create Button
+  //                   Row(
+  //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                     children: [
+  //                       Text(
+  //                         'Tags',
+  //                         style: TextStyle(
+  //                           fontSize: 14,
+  //                           color: Colors.white70,
+  //                           fontWeight: FontWeight.w500,
+  //                         ),
+  //                       ),
+  //                       // NEW: Create Tag Button
+  //                       if (!showCreateTagInput)
+  //                         TextButton.icon(
+  //                           onPressed: () {
+  //                             setModalState(() {
+  //                               showCreateTagInput = true;
+  //                             });
+  //                           },
+  //                           icon: Icon(Icons.add, size: 16, color: Color(0xFF667eea)),
+  //                           label: Text(
+  //                             'Create New',
+  //                             style: TextStyle(
+  //                               color: Color(0xFF667eea),
+  //                               fontSize: 13,
+  //                               fontWeight: FontWeight.w600,
+  //                             ),
+  //                           ),
+  //                           style: TextButton.styleFrom(
+  //                             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  //                             minimumSize: Size(0, 0),
+  //                           ),
+  //                         ),
+  //                     ],
+  //                   ),
+  //                   SizedBox(height: 8),
+
+  //                   // Display selected tags
+  //                   if (selectedTags.isNotEmpty)
+  //                     Container(
+  //                       margin: EdgeInsets.only(bottom: 12),
+  //                       child: Wrap(
+  //                         spacing: 8,
+  //                         runSpacing: 8,
+  //                         children: selectedTags.map((tag) {
+  //                           return Container(
+  //                             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+  //                             decoration: BoxDecoration(
+  //                               color: Color(0xFF667eea).withOpacity(0.2),
+  //                               borderRadius: BorderRadius.circular(8),
+  //                               border: Border.all(
+  //                                 color: Color(0xFF667eea).withOpacity(0.4),
+  //                               ),
+  //                             ),
+  //                             child: Row(
+  //                               mainAxisSize: MainAxisSize.min,
+  //                               children: [
+  //                                 Text(
+  //                                   '#$tag',
+  //                                   style: TextStyle(
+  //                                     color: Colors.white,
+  //                                     fontSize: 13,
+  //                                   ),
+  //                                 ),
+  //                                 SizedBox(width: 6),
+  //                                 GestureDetector(
+  //                                   onTap: () {
+  //                                     setModalState(() {
+  //                                       selectedTags.remove(tag);
+  //                                     });
+  //                                   },
+  //                                   child: Icon(
+  //                                     Icons.close,
+  //                                     size: 16,
+  //                                     color: Colors.white70,
+  //                                   ),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           );
+  //                         }).toList(),
+  //                       ),
+  //                     ),
+
+  //                   // NEW: Conditional rendering - Show either tag list or create input
+  //                   if (showCreateTagInput)
+  //                     // Create New Tag Input
+  //                     Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       children: [
+  //                         Container(
+  //                           decoration: BoxDecoration(
+  //                             color: Colors.white.withOpacity(0.08),
+  //                             borderRadius: BorderRadius.circular(12),
+  //                             border: Border.all(
+  //                               color: Colors.white.withOpacity(0.1),
+  //                             ),
+  //                           ),
+  //                           child: TextField(
+  //                             controller: tagController,
+  //                             autofocus: true,
+  //                             style: TextStyle(color: Colors.white, fontSize: 15),
+  //                             decoration: InputDecoration(
+  //                               hintText: 'Enter tag name',
+  //                               hintStyle: TextStyle(color: Colors.white38),
+  //                               prefixIcon: Icon(Icons.label, color: Colors.white.withOpacity(0.5)),
+  //                               border: InputBorder.none,
+  //                               contentPadding: EdgeInsets.symmetric(
+  //                                 horizontal: 16,
+  //                                 vertical: 14,
+  //                               ),
+  //                             ),
+  //                             onSubmitted: (value) {
+  //                               if (value.trim().isNotEmpty &&
+  //                                   !selectedTags.contains(value.trim())) {
+  //                                 setModalState(() {
+  //                                   selectedTags.add(value.trim());
+  //                                   tagController.clear();
+  //                                   showCreateTagInput = false;
+  //                                 });
+  //                                 _saveTagToUserList(value.trim());
+  //                               }
+  //                             },
+  //                           ),
+  //                         ),
+  //                         SizedBox(height: 8),
+  //                         Row(
+  //                           mainAxisAlignment: MainAxisAlignment.end,
+  //                           children: [
+  //                             TextButton(
+  //                               onPressed: () {
+  //                                 setModalState(() {
+  //                                   showCreateTagInput = false;
+  //                                   tagController.clear();
+  //                                 });
+  //                               },
+  //                               child: Text(
+  //                                 'Cancel',
+  //                                 style: TextStyle(color: Colors.white54),
+  //                               ),
+  //                             ),
+  //                             SizedBox(width: 8),
+  //                             ElevatedButton(
+  //                               onPressed: () {
+  //                                 if (tagController.text.trim().isNotEmpty &&
+  //                                     !selectedTags.contains(tagController.text.trim())) {
+  //                                   setModalState(() {
+  //                                     selectedTags.add(tagController.text.trim());
+  //                                     tagController.clear();
+  //                                     showCreateTagInput = false;
+  //                                   });
+  //                                   _saveTagToUserList(tagController.text.trim());
+  //                                 }
+  //                               },
+  //                               style: ElevatedButton.styleFrom(
+  //                                 backgroundColor: Color(0xFF667eea),
+  //                                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  //                                 shape: RoundedRectangleBorder(
+  //                                   borderRadius: BorderRadius.circular(8),
+  //                                 ),
+  //                               ),
+  //                               child: Text(
+  //                                 'Add',
+  //                                 style: TextStyle(color: Colors.white),
+  //                               ),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ],
+  //                     )
+  //                   else
+  //                     // NEW: Show Previously Created Tags as Choice Chips
+  //                     StreamBuilder(
+  //                       stream: _userTagsRef.onValue,
+  //                       builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+  //                         if (!snapshot.hasData || snapshot.data?.snapshot.value == null) {
+  //                           return Container(
+  //                             padding: EdgeInsets.all(20),
+  //                             decoration: BoxDecoration(
+  //                               color: Colors.white.withOpacity(0.05),
+  //                               borderRadius: BorderRadius.circular(12),
+  //                               border: Border.all(
+  //                                 color: Colors.white.withOpacity(0.1),
+  //                               ),
+  //                             ),
+  //                             child: Center(
+  //                               child: Column(
+  //                                 children: [
+  //                                   Icon(
+  //                                     Icons.label_off_outlined,
+  //                                     color: Colors.white38,
+  //                                     size: 32,
+  //                                   ),
+  //                                   SizedBox(height: 8),
+  //                                   Text(
+  //                                     'No tags yet. Create your first tag!',
+  //                                     style: TextStyle(
+  //                                       color: Colors.white38,
+  //                                       fontSize: 13,
+  //                                     ),
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                             ),
+  //                           );
+  //                         }
+
+  //                         final tagsData = snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+  //                         final userTags = <String>[];
+
+  //                         // Extract tag names from all child nodes
+  //                         tagsData.forEach((key, value) {
+  //                           if (value is Map && value['name'] != null) {
+  //                             final tagName = value['name'].toString();
+  //                             if (tagName.isNotEmpty && !selectedTags.contains(tagName)) {
+  //                               userTags.add(tagName);
+  //                             }
+  //                           }
+  //                         });
+
+  //                         if (userTags.isEmpty) {
+  //                           return Container(
+  //                             padding: EdgeInsets.all(20),
+  //                             decoration: BoxDecoration(
+  //                               color: Colors.white.withOpacity(0.05),
+  //                               borderRadius: BorderRadius.circular(12),
+  //                               border: Border.all(
+  //                                 color: Colors.white.withOpacity(0.1),
+  //                               ),
+  //                             ),
+  //                             child: Center(
+  //                               child: Column(
+  //                                 children: [
+  //                                   Icon(
+  //                                     Icons.check_circle_outline,
+  //                                     color: Color(0xFF667eea),
+  //                                     size: 32,
+  //                                   ),
+  //                                   SizedBox(height: 8),
+  //                                   Text(
+  //                                     'All tags selected',
+  //                                     style: TextStyle(
+  //                                       color: Colors.white38,
+  //                                       fontSize: 13,
+  //                                     ),
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                             ),
+  //                           );
+  //                         }
+
+  //                         return Container(
+  //                           constraints: BoxConstraints(maxHeight: 200),
+  //                           padding: EdgeInsets.all(12),
+  //                           decoration: BoxDecoration(
+  //                             color: Colors.white.withOpacity(0.05),
+  //                             borderRadius: BorderRadius.circular(12),
+  //                             border: Border.all(
+  //                               color: Colors.white.withOpacity(0.1),
+  //                             ),
+  //                           ),
+  //                           child: SingleChildScrollView(
+  //                             child: Wrap(
+  //                               spacing: 8,
+  //                               runSpacing: 8,
+  //                               children: userTags.map((tag) {
+  //                                 return InkWell(
+  //                                   onTap: () {
+  //                                     setModalState(() {
+  //                                       if (!selectedTags.contains(tag)) {
+  //                                         selectedTags.add(tag);
+  //                                       }
+  //                                     });
+  //                                   },
+  //                                   borderRadius: BorderRadius.circular(20),
+  //                                   child: Container(
+  //                                     padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+  //                                     decoration: BoxDecoration(
+  //                                       color: Colors.white.withOpacity(0.08),
+  //                                       borderRadius: BorderRadius.circular(20),
+  //                                       border: Border.all(
+  //                                         color: Color(0xFF667eea).withOpacity(0.3),
+  //                                         width: 1.5,
+  //                                       ),
+  //                                     ),
+  //                                     child: Row(
+  //                                       mainAxisSize: MainAxisSize.min,
+  //                                       children: [
+  //                                         Icon(
+  //                                           Icons.label,
+  //                                           color: Color(0xFF667eea),
+  //                                           size: 16,
+  //                                         ),
+  //                                         SizedBox(width: 6),
+  //                                         Text(
+  //                                           tag,
+  //                                           style: TextStyle(
+  //                                             color: Colors.white,
+  //                                             fontSize: 13,
+  //                                             fontWeight: FontWeight.w500,
+  //                                           ),
+  //                                         ),
+  //                                         SizedBox(width: 6),
+  //                                         Icon(
+  //                                           Icons.add_circle,
+  //                                           color: Color(0xFF667eea),
+  //                                           size: 16,
+  //                                         ),
+  //                                       ],
+  //                                     ),
+  //                                   ),
+  //                                 );
+  //                               }).toList(),
+  //                             ),
+  //                           ),
+  //                         );
+  //                       },
+  //                     ),
+
+  //                   SizedBox(height: 24),
+
+  //                   // Action Buttons
+  //                   Row(
+  //                     children: [
+  //                       Expanded(
+  //                         child: TextButton(
+  //                           onPressed: () => Navigator.pop(context),
+  //                           style: TextButton.styleFrom(
+  //                             padding: EdgeInsets.symmetric(vertical: 16),
+  //                             shape: RoundedRectangleBorder(
+  //                               borderRadius: BorderRadius.circular(12),
+  //                               side: BorderSide(
+  //                                 color: Colors.white.withOpacity(0.2),
+  //                               ),
+  //                             ),
+  //                           ),
+  //                           child: Text(
+  //                             'Skip',
+  //                             style: TextStyle(
+  //                               color: Colors.white70,
+  //                               fontSize: 16,
+  //                               fontWeight: FontWeight.w600,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       SizedBox(width: 12),
+  //                       Expanded(
+  //                         flex: 2,
+  //                         child: Container(
+  //                           height: 52,
+  //                           decoration: BoxDecoration(
+  //                             gradient: LinearGradient(
+  //                               colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+  //                             ),
+  //                             borderRadius: BorderRadius.circular(12),
+  //                             boxShadow: [
+  //                               BoxShadow(
+  //                                 color: Color(0xFF667eea).withOpacity(0.4),
+  //                                 blurRadius: 20,
+  //                                 offset: Offset(0, 8),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                           child: Material(
+  //                             color: Colors.transparent,
+  //                             child: InkWell(
+  //                               borderRadius: BorderRadius.circular(12),
+  //                               onTap: () async {
+  //                                 try {
+  //                                   await _dbRef.child(linkId).update({
+  //                                     'collection': selectedCollection ?? '',
+  //                                     'tags': selectedTags,
+  //                                   });
+  //                                   Navigator.pop(context);
+  //                                   if (mounted) {
+  //                                     ScaffoldMessenger.of(context).showSnackBar(
+  //                                       SnackBar(
+  //                                         content: Text('Link organized successfully!'),
+  //                                         behavior: SnackBarBehavior.floating,
+  //                                         backgroundColor: Colors.green.shade400,
+  //                                         shape: RoundedRectangleBorder(
+  //                                           borderRadius: BorderRadius.circular(10),
+  //                                         ),
+  //                                       ),
+  //                                     );
+  //                                   }
+  //                                 } catch (e) {
+  //                                   print('Error organizing link: $e');
+  //                                 }
+  //                               },
+  //                               child: Center(
+  //                                 child: Text(
+  //                                   'Save',
+  //                                   style: TextStyle(
+  //                                     fontSize: 16,
+  //                                     fontWeight: FontWeight.w600,
+  //                                     color: Colors.white,
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

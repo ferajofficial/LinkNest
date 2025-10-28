@@ -201,6 +201,7 @@ class _SigniupPageState extends ConsumerState<SignupPage> with TickerProviderSta
                           // User name field - animated
                           _buildAnimatedWidget(
                             TextField(
+                              style: TextStyle(color: Colors.black54),
                               controller: nameCtrl,
                               decoration: InputDecoration(
                                 hintText: 'Your name',
@@ -220,6 +221,7 @@ class _SigniupPageState extends ConsumerState<SignupPage> with TickerProviderSta
                           16.heightBox,
                           _buildAnimatedWidget(
                             TextField(
+                              style: TextStyle(color: Colors.black54),
                               controller: _emailCtrl,
                               decoration: InputDecoration(
                                 hintText: 'Your email',
@@ -241,6 +243,7 @@ class _SigniupPageState extends ConsumerState<SignupPage> with TickerProviderSta
                           // Password field - animated
                           _buildAnimatedWidget(
                             TextField(
+                              style: TextStyle(color: Colors.black54),
                               controller: _passwordCtrl,
                               obscureText: true,
                               decoration: InputDecoration(
@@ -263,6 +266,7 @@ class _SigniupPageState extends ConsumerState<SignupPage> with TickerProviderSta
                           // Password field - animated
                           _buildAnimatedWidget(
                             TextField(
+                              style: TextStyle(color: Colors.black54),
                               controller: _confirmPasswordCtrl,
                               obscureText: true,
                               decoration: InputDecoration(
