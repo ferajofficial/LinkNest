@@ -1,7 +1,9 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:link_nest/features/collections/collection_details_page.dart';
 
 @RoutePage()
 class CollectionPage extends StatefulWidget {
@@ -512,7 +514,7 @@ class _CollectionPageState extends State<CollectionPage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
-                        Icons.folder_rounded,
+                        Icons.folder_copy_outlined,
                         color: Colors.white54,
                         size: 20,
                       ),
@@ -668,10 +670,10 @@ class _CollectionPageState extends State<CollectionPage> {
       // GLOWING BUTTON
       floatingActionButton: Padding(
         padding: EdgeInsets.only(
-          bottom: MediaQuery.sizeOf(context).height * 0.14,
+          bottom: MediaQuery.sizeOf(context).height * 0.124,
         ),
         child: Container(
-          height: 40,
+          height: MediaQuery.sizeOf(context).height * 0.05,
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(30),
@@ -726,19 +728,13 @@ class _CollectionPageState extends State<CollectionPage> {
 
     return GestureDetector(
       onTap: () {
-        // TODO: Navigate to collection detail page
-        print('Tapped on collection: $name');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Opening $name collection'),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            margin: EdgeInsets.only(
-              bottom: 80,
-              left: 16,
-              right: 16,
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CollectionDetailPage(
+              collectionName: name,
+              gradientColors: gradient,
+              collectionId: collectionId,
             ),
           ),
         );

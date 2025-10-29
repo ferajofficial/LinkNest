@@ -57,6 +57,9 @@ class AppRouter extends RootStackRouter {
     AutoRoute(
       page: NavBarRoute.page,
     ),
+    AutoRoute(
+      page: CollectionDetailRoute.page,
+    ),
 
     // Auth routes - redirect to home if already authenticated
     AutoRoute(
