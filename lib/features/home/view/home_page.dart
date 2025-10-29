@@ -10,6 +10,7 @@ import 'package:link_nest/bootstrap.dart';
 import 'package:link_nest/const/resource.dart';
 import 'package:link_nest/core/router/router.gr.dart';
 import 'package:link_nest/data/providers/auth/auth_repo_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 @RoutePage(deferredLoading: true)
@@ -1670,6 +1671,45 @@ class _HomePageState extends ConsumerState<HomePage> {
   //   );
   // }
 
+  Future<void> _openLink(String url) async {
+    try {
+      // Clean and validate URL
+      String cleanUrl = url.trim();
+
+      // Add https:// if no scheme is present
+      if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
+        cleanUrl = 'https://$cleanUrl';
+      }
+
+      final uri = Uri.parse(cleanUrl);
+
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        throw 'Could not launch $cleanUrl';
+      }
+    } catch (e) {
+      print('Error opening link: $e'); // For debugging
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to open link: ${e.toString()}'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.red.shade400,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            margin: EdgeInsets.only(
+              bottom: 80,
+              left: 16,
+              right: 16,
+            ),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_userId == null) {
@@ -2245,7 +2285,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                         child: InkWell(
                                           borderRadius: BorderRadius.circular(16),
                                           onTap: () {
-                                            // Add your tap logic here
+                                            _openLink(link);
                                           },
                                           child: Padding(
                                             padding: EdgeInsets.all(16),
