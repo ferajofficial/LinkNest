@@ -41,6 +41,8 @@ dependencies:
   velocity_x: ^4.3.1
   liquid_glass_bottom_bar: ^0.0.6
   url_launcher: ^6.3.2
+  syncfusion_flutter_gauges: ^31.2.5
+  syncfusion_flutter_charts: ^31.2.5
 
 dev_dependencies:
   flutter_test:

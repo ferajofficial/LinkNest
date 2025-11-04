@@ -472,10 +472,17 @@ class _SplashLoaderChildState extends State<SplashLoaderChild> with TickerProvid
   late Animation<double> _dot4Animation;
   late Animation<double> _progressAnimation;
 
-  // Colors - Black & White Theme
-  final Color primaryColor = Colors.black;
-  final Color lightPrimaryColor = Colors.grey.shade300;
-  final Color darkerPrimaryColor = Colors.grey.shade700;
+  // Modern Dark Theme Colors
+  final Color primaryGradientStart = const Color(0xFF6366f1); // Indigo
+  final Color primaryGradientEnd = const Color(0xFF8b5cf6); // Purple
+  final Color accentBlue = const Color(0xFF3b82f6); // Bright Blue
+  final Color accentPurple = const Color(0xFFa855f7); // Vibrant Purple
+  final Color darkBg1 = const Color(0xFF1a1a2e);
+  final Color darkBg2 = const Color(0xFF16213e);
+  final Color darkBg3 = const Color(0xFF0f3460);
+  final Color cardBg = const Color(0xFF1e293b);
+  final Color textPrimary = Colors.white;
+  final Color textSecondary = const Color(0xFF94a3b8);
 
   @override
   void initState() {
@@ -676,236 +683,397 @@ class _SplashLoaderChildState extends State<SplashLoaderChild> with TickerProvid
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Spacer(),
-            // Animated Logo with Circles
-            AnimatedBuilder(
-              animation: Listenable.merge([_masterController, _logoZoomController]),
-              builder: (context, child) {
-                double logoScale =
-                    _logoZoomController.isAnimating ? _safeScale(_logoZoomAnimation.value) : 1.0;
-
-                return Transform.scale(
-                  scale: logoScale,
-                  child: SizedBox(
-                    width: 220,
-                    height: 220,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        // Outer circle (outline)
-                        Transform.scale(
-                          scale: _safeScale(_outerCircleScale.value),
-                          child: Opacity(
-                            opacity: _safeOpacity(_outerCircleOpacity.value),
-                            child: Container(
-                              width: 220,
-                              height: 220,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.black,
-                                  width: 1.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        // Middle circle
-                        Transform.scale(
-                          scale: _safeScale(_middleCircleScale.value),
-                          child: Opacity(
-                            opacity: _safeOpacity(_middleCircleOpacity.value),
-                            child: Container(
-                              width: 160,
-                              height: 160,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.grey.shade200,
-                              ),
-                            ),
-                          ),
-                        ),
-                        // Inner circle with content
-                        Transform.scale(
-                          scale: _safeScale(_innerCircleScale.value),
-                          child: Opacity(
-                            opacity: _safeOpacity(_innerCircleOpacity.value),
-                            child: Container(
-                              width: 110,
-                              height: 110,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.grey.shade100,
-                                image: DecorationImage(
-                                  image: AssetImage('assets/logos/appIcon.png'),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 50),
-            // Spacer(),
-
-            // Animated Title
-            SlideTransition(
-              position: _titleSlideAnimation,
-              child: AnimatedBuilder(
-                animation: _titleOpacityAnimation,
+      body: Container(
+        // Modern gradient background
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              darkBg1,
+              darkBg2,
+              darkBg3,
+            ],
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Animated Logo with Modern Glassmorphism Effect
+              AnimatedBuilder(
+                animation: Listenable.merge([_masterController, _logoZoomController]),
                 builder: (context, child) {
-                  return Opacity(
-                    opacity: _safeOpacity(_titleOpacityAnimation.value),
-                    child: Text(
-                      'Link Nest',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        letterSpacing: 0.5,
+                  double logoScale =
+                      _logoZoomController.isAnimating ? _safeScale(_logoZoomAnimation.value) : 1.0;
+
+                  return Transform.scale(
+                    scale: logoScale,
+                    child: Container(
+                      width: 220,
+                      height: 220,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        // Subtle glow effect
+                        boxShadow: [
+                          BoxShadow(
+                            color: primaryGradientStart
+                                .withOpacity(0.3 * _safeOpacity(_outerCircleOpacity.value)),
+                            blurRadius: 40,
+                            spreadRadius: 5,
+                          ),
+                          BoxShadow(
+                            color: primaryGradientEnd
+                                .withOpacity(0.2 * _safeOpacity(_outerCircleOpacity.value)),
+                            blurRadius: 60,
+                            spreadRadius: 10,
+                          ),
+                        ],
                       ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // Animated Subtitle with Typing Effect
-            SlideTransition(
-              position: _subtitleSlideAnimation,
-              child: AnimatedBuilder(
-                animation: Listenable.merge([_subtitleOpacityAnimation, _typingAnimation]),
-                builder: (context, child) {
-                  String fullText = 'Link it, nest it, forget the rest.';
-                  int charactersToShow = (_typingAnimation.value * fullText.length).floor();
-                  String displayText = fullText.substring(0, charactersToShow);
-
-                  return Opacity(
-                    opacity: _safeOpacity(_subtitleOpacityAnimation.value),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          displayText,
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey[600],
-                            letterSpacing: 0.3,
-                          ),
-                        ),
-                        // Blinking cursor effect
-                        if (charactersToShow < fullText.length)
-                          AnimatedBuilder(
-                            animation: _masterController,
-                            builder: (context, child) {
-                              return Opacity(
-                                opacity:
-                                    ((_masterController.value * 8) % 2).floor() == 0 ? 1.0 : 0.0,
-                                child: Text(
-                                  '|',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.grey[600],
-                                    fontWeight: FontWeight.w300,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Outer circle with gradient border
+                          Transform.scale(
+                            scale: _safeScale(_outerCircleScale.value),
+                            child: Opacity(
+                              opacity: _safeOpacity(_outerCircleOpacity.value),
+                              child: Container(
+                                width: 220,
+                                height: 220,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      primaryGradientStart,
+                                      primaryGradientEnd,
+                                    ],
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: primaryGradientStart.withOpacity(0.3),
+                                      blurRadius: 20,
+                                      spreadRadius: 2,
+                                    ),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: darkBg2,
+                                    ),
                                   ),
                                 ),
-                              );
-                            },
+                              ),
+                            ),
+                          ),
+                          // Middle circle with glassmorphism
+                          Transform.scale(
+                            scale: _safeScale(_middleCircleScale.value),
+                            child: Opacity(
+                              opacity: _safeOpacity(_middleCircleOpacity.value),
+                              child: Container(
+                                width: 160,
+                                height: 160,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: cardBg.withOpacity(0.5),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(0.1),
+                                    width: 1,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 15,
+                                      spreadRadius: 1,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Inner circle with content and gradient overlay
+                          Transform.scale(
+                            scale: _safeScale(_innerCircleScale.value),
+                            child: Opacity(
+                              opacity: _safeOpacity(_innerCircleOpacity.value),
+                              child: Container(
+                                width: 110,
+                                height: 110,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      primaryGradientStart.withOpacity(0.2),
+                                      primaryGradientEnd.withOpacity(0.1),
+                                    ],
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(0.15),
+                                    width: 1.5,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: primaryGradientStart.withOpacity(0.3),
+                                      blurRadius: 15,
+                                      spreadRadius: 1,
+                                    ),
+                                  ],
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/logos/appIcon2.png'),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+
+              const SizedBox(height: 50),
+
+              // Animated Title with gradient text effect
+              SlideTransition(
+                position: _titleSlideAnimation,
+                child: AnimatedBuilder(
+                  animation: _titleOpacityAnimation,
+                  builder: (context, child) {
+                    return Opacity(
+                      opacity: _safeOpacity(_titleOpacityAnimation.value),
+                      child: ShaderMask(
+                        shaderCallback: (bounds) => LinearGradient(
+                          colors: [
+                            textPrimary,
+                            textPrimary.withOpacity(0.9),
+                          ],
+                        ).createShader(bounds),
+                        child: Text(
+                          'Link Nest',
+                          style: TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            color: textPrimary,
+                            letterSpacing: 1.2,
+                            height: 1.2,
+                            shadows: [
+                              Shadow(
+                                color: primaryGradientStart.withOpacity(0.3),
+                                blurRadius: 20,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              // Animated Subtitle with Typing Effect
+              SlideTransition(
+                position: _subtitleSlideAnimation,
+                child: AnimatedBuilder(
+                  animation: Listenable.merge([_subtitleOpacityAnimation, _typingAnimation]),
+                  builder: (context, child) {
+                    String fullText = 'Link it, nest it, forget the rest.';
+                    int charactersToShow = (_typingAnimation.value * fullText.length).floor();
+                    String displayText = fullText.substring(0, charactersToShow);
+
+                    return Opacity(
+                      opacity: _safeOpacity(_subtitleOpacityAnimation.value),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            displayText,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: textSecondary,
+                              letterSpacing: 0.5,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          // Blinking cursor effect with gradient
+                          if (charactersToShow < fullText.length)
+                            AnimatedBuilder(
+                              animation: _masterController,
+                              builder: (context, child) {
+                                return Opacity(
+                                  opacity:
+                                      ((_masterController.value * 8) % 2).floor() == 0 ? 1.0 : 0.0,
+                                  child: Container(
+                                    margin: const EdgeInsets.only(left: 2),
+                                    width: 2,
+                                    height: 18,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          primaryGradientStart,
+                                          primaryGradientEnd,
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(1),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 70),
+
+              // Animated Dots with vibrant colors
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildDot(_dot1Animation, 0),
+                  _buildDot(_dot2Animation, 1),
+                  _buildDot(_dot3Animation, 2),
+                  _buildDot(_dot4Animation, 3),
+                ],
+              ),
+
+              const SizedBox(height: 40),
+
+              // Animated Progress Bar with vibrant gradient
+              AnimatedBuilder(
+                animation: _progressAnimation,
+                builder: (context, child) {
+                  return Container(
+                    width: 240,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: const Color(0xFF0f172a),
+                      border: Border.all(
+                        color: const Color(0xFF1e293b),
+                        width: 1,
+                      ),
+                    ),
+                    child: Stack(
+                      alignment: Alignment.centerLeft,
+                      children: [
+                        // Progress fill with vibrant gradient
+                        Container(
+                          width: 240 * _safeOpacity(_progressAnimation.value),
+                          height: 5,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: LinearGradient(
+                              colors: [
+                                accentBlue,
+                                primaryGradientStart,
+                                primaryGradientEnd,
+                                accentPurple,
+                              ],
+                              stops: const [0.0, 0.33, 0.66, 1.0],
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: accentBlue.withOpacity(0.4),
+                                blurRadius: 12,
+                                spreadRadius: 1,
+                              ),
+                              BoxShadow(
+                                color: accentPurple.withOpacity(0.3),
+                                blurRadius: 16,
+                                spreadRadius: 2,
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Shimmer effect
+                        if (_progressAnimation.value > 0.1)
+                          Positioned(
+                            left: (240 * _safeOpacity(_progressAnimation.value)) - 30,
+                            child: Container(
+                              width: 30,
+                              height: 5,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.transparent,
+                                    Colors.white.withOpacity(0.5),
+                                    Colors.transparent,
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                       ],
                     ),
                   );
                 },
               ),
-            ),
-
-            const SizedBox(height: 60),
-            // Spacer(),
-
-            // Animated Dots
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildDot(_dot1Animation),
-                _buildDot(_dot2Animation),
-                _buildDot(_dot3Animation),
-                _buildDot(_dot4Animation),
-              ],
-            ),
-
-            const SizedBox(height: 40),
-
-            // Animated Progress Bar
-            AnimatedBuilder(
-              animation: _progressAnimation,
-              builder: (context, child) {
-                return Container(
-                  width: 220,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2),
-                    color: Colors.grey[300],
-                  ),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Progress fill from center
-                      Container(
-                        width: 220 * _safeOpacity(_progressAnimation.value),
-                        height: 4,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2),
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.black.withOpacity(0.6),
-                              Colors.black,
-                              Colors.black.withOpacity(0.6),
-                            ],
-                            stops: const [0.0, 0.5, 1.0],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildDot(Animation<double> animation) {
+  Widget _buildDot(Animation<double> animation, int index) {
     return AnimatedBuilder(
       animation: animation,
       builder: (context, child) {
         double animValue = _safeOpacity(animation.value);
+
+        // Different vibrant colors for each dot
+        List<Color> dotColors = [
+          accentBlue,
+          primaryGradientStart,
+          primaryGradientEnd,
+          accentPurple,
+        ];
+
         return Transform.scale(
           scale: animValue,
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 4),
-            width: 10,
-            height: 10,
+            margin: const EdgeInsets.symmetric(horizontal: 6),
+            width: 12,
+            height: 12,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.black.withOpacity(animValue),
-              border: Border.all(
-                color: Colors.grey.withOpacity(0.5),
-                width: 1,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  dotColors[index].withOpacity(animValue),
+                  dotColors[index].withOpacity(animValue * 0.7),
+                ],
               ),
+              border: Border.all(
+                color: dotColors[index].withOpacity(0.5 * animValue),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: dotColors[index].withOpacity(0.5 * animValue),
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                ),
+              ],
             ),
           ),
         );

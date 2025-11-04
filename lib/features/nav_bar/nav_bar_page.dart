@@ -2,7 +2,7 @@ import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:link_nest/features/collections/collection_page.dart';
 import 'package:link_nest/features/home/view/home_page.dart';
-import 'package:link_nest/features/tags/tags_page.dart';
+import 'package:link_nest/features/profile/view/profile_page.dart';
 import 'package:liquid_glass_bottom_bar/liquid_glass_bottom_bar.dart';
 
 @RoutePage()
@@ -19,7 +19,8 @@ class _NavBarPageState extends State<NavBarPage> {
   final List<Widget> screens = const [
     HomePage(),
     CollectionPage(),
-    TagsPage(),
+    // TagsPage(),
+    ProfilePage()
   ];
 
   @override
